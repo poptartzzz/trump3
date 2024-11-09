@@ -4,16 +4,21 @@ interface Message {
   timestamp: Date;
 }
 
+interface StoredMessage {
+  address: string;
+  content: string;
+  timestamp: string;
+}
+
 class MessageStore {
   private messages: Message[] = [];
   private readonly MAX_MESSAGES = 100;
 
   constructor() {
-    // Load messages from localStorage on initialization
     if (typeof window !== 'undefined') {
       const savedMessages = localStorage.getItem('chatMessages');
       if (savedMessages) {
-        this.messages = JSON.parse(savedMessages).map((msg: any) => ({
+        this.messages = JSON.parse(savedMessages).map((msg: StoredMessage) => ({
           ...msg,
           timestamp: new Date(msg.timestamp)
         }));
@@ -24,9 +29,8 @@ class MessageStore {
   addMessage(message: Message) {
     this.messages.push(message);
     if (this.messages.length > this.MAX_MESSAGES) {
-      this.messages.shift(); // Remove oldest message
+      this.messages.shift();
     }
-    // Save to localStorage
     if (typeof window !== 'undefined') {
       localStorage.setItem('chatMessages', JSON.stringify(this.messages));
     }
@@ -44,5 +48,4 @@ class MessageStore {
   }
 }
 
-// Create a singleton instance
-export const messageStore = new MessageStore(); 
+export const messageStore = new MessageStore();

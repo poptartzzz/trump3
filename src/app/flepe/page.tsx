@@ -3,7 +3,7 @@
 import { Press_Start_2P } from 'next/font/google'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowLeft, Wallet, Gamepad2, Trophy, Timer, AlertCircle, DollarSign, Loader2 } from 'lucide-react'
+import { ArrowLeft, Wallet, Trophy, Timer, AlertCircle, DollarSign, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BalanceDropdown } from "@/components/balance-dropdown"
