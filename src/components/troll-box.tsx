@@ -7,6 +7,16 @@ import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Wallet, Send } from 'lucide-react'
 import { useWallet } from '@/app/providers'
+import Pusher from 'pusher-js';
+
+const PUSHER_KEY = "181d264c0437add91668";
+const PUSHER_CLUSTER = "mt1";
+
+const pusher = new Pusher(PUSHER_KEY, {
+  cluster: PUSHER_CLUSTER
+});
+
+const channel = pusher.subscribe('chat');
 
 interface Message {
   address: string
@@ -21,24 +31,47 @@ export function TrollBox() {
   
   const { address, isConnected, connect, disconnect } = useWallet()
 
+  // Initialize WebSocket connection
+  useEffect(() => {
+    channel.bind('message', (data: Message) => {
+      setMessages(prev => [...prev, {
+        address: data.address,
+        content: data.content,
+        timestamp: new Date(data.timestamp)
+      }]);
+    });
+
+    return () => {
+      channel.unbind_all();
+      channel.unsubscribe();
+    };
+  }, []);
+
+  // Auto scroll to bottom on new messages
   useEffect(() => {
     if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages])
+  }, [messages]);
 
   const handleSend = () => {
-    if (!newMessage.trim() || !isConnected) return
+    if (!newMessage.trim() || !isConnected) return;
 
-    const message: Message = {
+    const message = {
       address: address as string,
       content: newMessage.trim(),
       timestamp: new Date()
-    }
+    };
 
-    setMessages(prev => [...prev, message])
-    setNewMessage('')
-  }
+    // Send to Pusher
+    fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(message)
+    });
+
+    setNewMessage('');
+  };
 
   const formatAddress = (addr: string) => {
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`

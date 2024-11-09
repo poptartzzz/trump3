@@ -18,7 +18,8 @@ import {
   MessageCircle,
   Twitter,
   Flame,
-  Banknote
+  Banknote,
+  Copy
 } from 'lucide-react'
 import { 
   Card,
@@ -87,17 +88,22 @@ export default function Home() {
         {/* Sidebar Navigation */}
         <aside className="space-y-4 lg:space-y-6 p-6">
           <div className="space-y-2">
-            <div className="flex items-center gap-2 rounded-lg bg-gradient-to-br from-[#1a4d1a] to-[#0d260d] shadow-lg shadow-[#63e211]/10 px-3 py-2">
-              <Image
-                src="/wagiebetlogocoin1.png"
-                alt="Currency icon"
-                className="rounded-full"
-                height={24}
-                width={24}
-              />
-              <div>
-                <div className="font-semibold font-press-start-2p text-[#63e211]">8BET Coin</div>
-                <div className="text-sm text-red-400">-6.13%</div>
+            <div className="flex flex-col gap-1 rounded-lg bg-gradient-to-br from-[#1a4d1a] to-[#0d260d] shadow-lg shadow-[#63e211]/10 px-3 py-2">
+              <div className="flex items-center gap-2">
+                <Image
+                  src="/wagiebetlogocoin1.png"
+                  alt="Currency icon"
+                  className="rounded-full"
+                  height={24}
+                  width={24}
+                />
+                <div>
+                  <div className="font-semibold font-press-start-2p text-[#63e211]">8BET Coin</div>
+                  <div className="text-sm text-red-400">-6.13%</div>
+                </div>
+              </div>
+              <div className="text-[10px] text-[#63e211]/70 font-mono">
+                0x...Coming soon
               </div>
             </div>
           </div>
@@ -277,18 +283,33 @@ export default function Home() {
 
           {/* 8BET Coin Stats */}
           <section className="rounded-xl bg-gradient-to-br from-[#1a4d1a] to-[#0d260d] p-4 lg:p-6 backdrop-blur-sm shadow-xl shadow-[#63e211]/10 border border-[#63e211]/20">
-            <div className="mb-4 lg:mb-6 flex items-center gap-4">
-              <Image
-                src="/wagiebetlogocoin1.png"
-                alt="8BET Coin"
-                className="rounded-full"
-                height={48}
-                width={48}
-              />
-              <div>
-                <h2 className="text-xl lg:text-2xl font-bold text-[#63e211] font-press-start-2p">8BET COIN</h2>
-                <div className="text-xs lg:text-sm text-[#63e211]">
-                  24h Volume: $0.00 • Holders: 0
+            <div className="mb-4 lg:mb-6">
+              <div className="flex items-center gap-4">
+                <Image
+                  src="/wagiebetlogocoin1.png"
+                  alt="8BET Coin"
+                  className="rounded-full"
+                  height={48}
+                  width={48}
+                />
+                <div>
+                  <div className="flex items-center gap-3">
+                    <h2 className="text-xl lg:text-2xl font-bold text-[#63e211] font-press-start-2p">8BET COIN</h2>
+                    <div className="flex items-center gap-2 bg-black/30 px-3 py-1 rounded-lg">
+                      <code className="text-xs text-[#63e211]/70 font-mono">0x...Coming soon</code>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6 hover:bg-[#63e211]/20"
+                        onClick={() => navigator.clipboard.writeText('0x...Coming soon')}
+                      >
+                        <Copy className="h-3 w-3 text-[#63e211]" />
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="text-xs lg:text-sm text-[#63e211]">
+                    24h Volume: $0.00 • Holders: 0
+                  </div>
                 </div>
               </div>
             </div>
@@ -303,6 +324,9 @@ export default function Home() {
                 <div className="text-xl lg:text-2xl font-bold text-[#63e211] font-press-start-2p">0</div>
                 <div className="text-xs lg:text-sm text-green-500 font-press-start-2p text-[#63e211]">$0.00</div>
               </div>
+            </div>
+            <div className="mt-4 text-[10px] text-[#63e211]/70 font-mono">
+              0x...Coming soon
             </div>
             <div className="mt-4 lg:mt-6 flex gap-4 flex-col sm:flex-row">
               <Link 
