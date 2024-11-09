@@ -13,6 +13,10 @@ interface ChatMessage {
 const wss = new WebSocketServer({ port: 8080 });
 const clients = new Set<Client>();
 
+// Store messages in memory (you might want to use a database in production)
+const messageHistory: ChatMessage[] = [];
+const MAX_MESSAGES = 50; // Keep last 50 messages
+
 // Ping clients every 30 seconds to keep connections alive
 const interval = setInterval(() => {
   clients.forEach((client) => {
@@ -30,6 +34,14 @@ wss.on('connection', (ws: Client) => {
   ws.isAlive = true;
   clients.add(ws);
 
+  // Send message history to new client
+  if (messageHistory.length > 0) {
+    ws.send(JSON.stringify({
+      type: 'history',
+      messages: messageHistory
+    }));
+  }
+
   // Handle pong responses
   ws.on('pong', () => {
     ws.isAlive = true;
@@ -40,10 +52,20 @@ wss.on('connection', (ws: Client) => {
     try {
       const message: ChatMessage = JSON.parse(data);
       
+      // Store message in history
+      messageHistory.push(message);
+      // Keep only last MAX_MESSAGES
+      if (messageHistory.length > MAX_MESSAGES) {
+        messageHistory.shift();
+      }
+      
       // Broadcast to all connected clients
       clients.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify(message));
+          client.send(JSON.stringify({
+            type: 'message',
+            message
+          }));
         }
       });
     } catch (error) {

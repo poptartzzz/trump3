@@ -3,7 +3,6 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Press_Start_2P } from 'next/font/google'
-import { useEffect, useState } from 'react'
 import { BalanceDropdown } from "@/components/balance-dropdown"
 import { PromoBanner } from "@/components/promo-banner"
 import { TrollBox } from "@/components/troll-box"
@@ -18,8 +17,7 @@ import {
   MessageCircle,
   Twitter,
   Flame,
-  Banknote,
-  Copy
+  Banknote
 } from 'lucide-react'
 import { 
   Card,
@@ -27,6 +25,7 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import { usePriceStore } from "@/lib/price-service"
 
 const pressStart2P = Press_Start_2P({ 
   weight: '400',
@@ -35,11 +34,7 @@ const pressStart2P = Press_Start_2P({
 })
 
 export default function Home() {
-  const [winAmounts, setWinAmounts] = useState<number[]>([])
-
-  useEffect(() => {
-    setWinAmounts(Array.from({ length: 8 }, () => Number((Math.random() * 1000).toFixed(2))))
-  }, [])
+  const { prices, volume24h, holders } = usePriceStore()
 
   return (
     <div className={`min-h-screen bg-black text-[#63e211] ${pressStart2P.variable} flex flex-col`}>
@@ -228,14 +223,34 @@ export default function Home() {
             <ScrollArea className="w-full">
               <div className="flex space-x-4 pb-4">
                 {[
-                  { name: 'FLAPPY PEPE', amount: winAmounts[0], image: '/pepejumpimg.png' },
-                  { name: 'TANKZ', amount: winAmounts[1], image: '/wojaktanks.png' },
-                  { name: 'ETHRIS', amount: winAmounts[2], image: '/pepetetris.png' },
-                  { name: 'BOUNCE', amount: winAmounts[3], image: '/pepejbounce.png' },
+                  { 
+                    name: 'FLAPPY PEPE', 
+                    amount: 3.65, 
+                    image: '/pepejumpimg.png',
+                    isLive: true 
+                  },
+                  { 
+                    name: 'TANKZ', 
+                    amount: 0, 
+                    image: '/wojaktanks.png',
+                    isLive: false 
+                  },
+                  { 
+                    name: 'ETHRIS', 
+                    amount: 0, 
+                    image: '/pepetetris.png',
+                    isLive: false 
+                  },
+                  { 
+                    name: 'BOUNCE', 
+                    amount: 0, 
+                    image: '/pepejbounce.png',
+                    isLive: false 
+                  },
                 ].map((game, i) => (
                   <Card 
                     key={i} 
-                    className="min-w-[220px] max-w-[220px] bg-gradient-to-br from-[#1a4d1a] to-[#0d260d] shadow-lg shadow-[#63e211]/10 backdrop-blur-sm border border-[#63e211]/20 transform transition-all duration-200 hover:scale-105"
+                    className={`min-w-[220px] max-w-[220px] bg-gradient-to-br from-[#1a4d1a] to-[#0d260d] shadow-lg shadow-[#63e211]/10 backdrop-blur-sm border border-[#63e211]/20 transform transition-all duration-200 hover:scale-105 ${!game.isLive && 'opacity-50'}`}
                   >
                     <CardContent className="p-4">
                       <div className="relative aspect-video w-full overflow-hidden rounded-lg">
@@ -246,9 +261,16 @@ export default function Home() {
                           fill
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-green-900/80 to-transparent" />
+                        {!game.isLive && (
+                          <div className="absolute top-2 right-2 bg-black/80 px-2 py-1 rounded text-[8px] text-[#63e211] font-press-start-2p border border-[#63e211]/20">
+                            COMING SOON
+                          </div>
+                        )}
                       </div>
                       <div className="mt-3 space-y-3">
-                        <div className="text-sm font-medium text-[#63e211] font-press-start-2p">{game.name}</div>
+                        <div className="text-sm font-medium text-[#63e211] font-press-start-2p">
+                          {game.name}
+                        </div>
                         
                         {/* Pot Amount */}
                         <div className="flex items-center gap-2 bg-black/30 p-2 rounded-lg">
@@ -262,12 +284,14 @@ export default function Home() {
                         <div className="grid grid-cols-2 gap-2">
                           <Button 
                             className="bg-[#63e211] text-black hover:bg-[#7fff00] shadow-md shadow-[#63e211]/20 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 font-press-start-2p text-[10px]"
+                            disabled={!game.isLive}
                           >
                             WAGER
                           </Button>
                           <Button 
                             variant="outline"
                             className="border-[#ff6666] bg-[#ff6666]/20 text-[#ff6666] hover:bg-[#ff6666]/30 font-press-start-2p text-[10px]"
+                            disabled={!game.isLive}
                           >
                             PRACTICE
                           </Button>
@@ -295,38 +319,27 @@ export default function Home() {
                 <div>
                   <div className="flex items-center gap-3">
                     <h2 className="text-xl lg:text-2xl font-bold text-[#63e211] font-press-start-2p">8BET COIN</h2>
-                    <div className="flex items-center gap-2 bg-black/30 px-3 py-1 rounded-lg">
-                      <code className="text-xs text-[#63e211]/70 font-mono">0x...Coming soon</code>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-6 w-6 hover:bg-[#63e211]/20"
-                        onClick={() => navigator.clipboard.writeText('0x...Coming soon')}
-                      >
-                        <Copy className="h-3 w-3 text-[#63e211]" />
-                      </Button>
-                    </div>
                   </div>
                   <div className="text-xs lg:text-sm text-[#63e211]">
-                    24h Volume: $0.00 • Holders: 0
+                    Coin Price: ${prices['8bet'].toFixed(6)} • 24h Volume: ${volume24h.toLocaleString()} • Holders: {holders.toLocaleString()}
                   </div>
                 </div>
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
               <div>
-                <div className="text-xs lg:text-sm text-[#63e211]">24h 8BET Revenue</div>
+                <div className="text-xs lg:text-sm text-[#63e211]">24h Revenue</div>
                 <div className="text-xl lg:text-2xl font-bold text-[#63e211] font-press-start-2p">$0.00</div>
                 <div className="text-xs lg:text-sm text-orange-400">↑ 0.00%</div>
               </div>
               <div>
-                <div className="text-xs lg:text-sm text-[#63e211]">24h 8BET Burnt</div>
+                <div className="text-xs lg:text-sm text-[#63e211]">24h Burnt</div>
                 <div className="text-xl lg:text-2xl font-bold text-[#63e211] font-press-start-2p">0</div>
                 <div className="text-xs lg:text-sm text-green-500 font-press-start-2p text-[#63e211]">$0.00</div>
               </div>
             </div>
-            <div className="mt-4 text-[10px] text-[#63e211]/70 font-mono">
-              0x...Coming soon
+            <div className="mt-4 text-[10px] text-[#63e211]/50 italic text-center">
+              Information updated every 30 minutes
             </div>
             <div className="mt-4 lg:mt-6 flex gap-4 flex-col sm:flex-row">
               <Link 

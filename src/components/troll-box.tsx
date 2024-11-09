@@ -24,6 +24,14 @@ interface Message {
   timestamp: Date
 }
 
+interface MessageResponse {
+  messages: {
+    address: string;
+    content: string;
+    timestamp: string;
+  }[];
+}
+
 export function TrollBox() {
   const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState('')
@@ -31,8 +39,22 @@ export function TrollBox() {
   
   const { address, isConnected, connect, disconnect } = useWallet()
 
-  // Initialize WebSocket connection
+  // Fetch message history on load
   useEffect(() => {
+    fetch('/api/chat')
+      .then(res => res.json())
+      .then((data: MessageResponse) => {
+        setMessages(data.messages.map(msg => ({
+          address: msg.address,
+          content: msg.content,
+          timestamp: new Date(msg.timestamp)
+        })));
+      });
+  }, []);
+
+  // Initialize Pusher connection
+  useEffect(() => {
+    // Listen for new messages
     channel.bind('message', (data: Message) => {
       setMessages(prev => [...prev, {
         address: data.address,
@@ -63,7 +85,7 @@ export function TrollBox() {
       timestamp: new Date()
     };
 
-    // Send to Pusher
+    // Send to API
     fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -74,11 +96,11 @@ export function TrollBox() {
   };
 
   const formatAddress = (addr: string) => {
-    return `${addr.slice(0, 6)}...${addr.slice(-4)}`
+    return `${addr.slice(0, 4)}..${addr.slice(-2)}`
   }
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    return new Date(date).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
   }
 
   return (
@@ -94,14 +116,20 @@ export function TrollBox() {
             {messages.map((msg, i) => (
               <div key={i} className="space-y-1">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] text-[#63e211] font-press-start-2p">
-                    {formatAddress(msg.address)}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] text-[#63e211] font-press-start-2p">
+                      {formatAddress(msg.address)}
+                    </span>
+                    <div className="w-[52px] h-4 rounded-full bg-[#CD7F32] flex items-center justify-center">
+                      <span className="text-[6px] text-black font-normal mt-[1px]">lvl</span>
+                      <span className="text-[9px] text-black font-bold ml-0.5">1</span>
+                    </div>
+                  </div>
                   <span className="text-[10px] text-[#63e211]/50 font-press-start-2p">
                     {formatTime(msg.timestamp)}
                   </span>
                 </div>
-                <p className="text-xs text-[#63e211] font-press-start-2p break-words">
+                <p className="text-[10px] text-[#63e211]/80 font-press-start-2p break-words">
                   {msg.content}
                 </p>
               </div>

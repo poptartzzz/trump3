@@ -19,7 +19,7 @@ export default function AccountPage() {
   const { isConnected, address, connect } = useWallet()
 
   const formatAddress = (addr: string) => {
-    return `${addr.slice(0, 6)}...${addr.slice(-4)}`
+    return `${addr.slice(0, 4)}..${addr.slice(-2)}`
   }
 
   return (
@@ -82,6 +82,10 @@ export default function AccountPage() {
               <div className="flex items-center justify-center gap-2 text-sm">
                 <Wallet className="h-4 w-4" />
                 <span>{isConnected ? formatAddress(address as string) : '0x000...0000'}</span>
+                <div className="w-[52px] h-4 rounded-full bg-[#CD7F32] flex items-center justify-center">
+                  <span className="text-[6px] text-black font-normal mt-[1px]">lvl</span>
+                  <span className="text-[9px] text-black font-bold ml-0.5">1</span>
+                </div>
               </div>
             </div>
 
@@ -127,16 +131,16 @@ export default function AccountPage() {
                 ].map((game) => (
                   <div key={game.name} className="bg-black/30 p-4 rounded-lg">
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium">{game.name}</span>
-                      <span className="text-xs text-[#63e211]/80">Games Played: {game.played}</span>
+                      <span className="text-sm font-medium text-[#63e211]">{game.name}</span>
+                      <span className="text-xs text-[#63e211]/70">Games Played: {game.played}</span>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <div className="text-xs text-[#63e211]/80">Won</div>
+                        <div className="text-xs text-[#63e211]/70">Won</div>
                         <div className="text-sm text-[#63e211]">{game.won}</div>
                       </div>
                       <div>
-                        <div className="text-xs text-[#63e211]/80">Lost</div>
+                        <div className="text-xs text-[#63e211]/70">Lost</div>
                         <div className="text-sm text-[#63e211]">{game.lost}</div>
                       </div>
                     </div>

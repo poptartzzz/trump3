@@ -1,4 +1,5 @@
 import Pusher from 'pusher';
+import { messageStore } from '@/lib/message-store';
 
 const pusher = new Pusher({
   appId: "1893445",
@@ -10,6 +11,11 @@ const pusher = new Pusher({
 
 export async function POST(req: Request) {
   const message = await req.json();
+  messageStore.addMessage(message);
   await pusher.trigger('chat', 'message', message);
   return new Response('OK');
+}
+
+export async function GET() {
+  return Response.json({ messages: messageStore.getMessages() });
 } 
