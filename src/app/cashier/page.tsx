@@ -1,18 +1,27 @@
 'use client'
 
-import { DepositAddress } from '@/components/deposit-address'
+import dynamic from 'next/dynamic'
 import { Press_Start_2P } from 'next/font/google'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowLeft, Wallet } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { CustomImage } from "@/components/ui/custom-image"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import Image from 'next/image'
+import { useWallet } from '@/app/providers'
+import { BalanceDropdown } from "@/components/balance-dropdown"
 import eth32 from 'cryptocurrency-icons/32/color/eth.png'
 import usdc32 from 'cryptocurrency-icons/32/color/usdc.png'
-import { BalanceDropdown } from "@/components/balance-dropdown"
-import { WithdrawAddress } from "@/components/withdraw-address"
-import { useWallet } from '@/app/providers'
+
+// Dynamically import components that use window
+const DepositAddress = dynamic(
+  () => import('@/components/deposit-address'),
+  { ssr: false }
+)
+
+const WithdrawAddress = dynamic(
+  () => import('@/components/withdraw-address'),
+  { ssr: false }
+)
 
 const pressStart2P = Press_Start_2P({ 
   weight: '400',
@@ -30,7 +39,7 @@ export default function CashierPage() {
         <div className="container max-w-[1400px] flex h-20 items-center justify-between px-0">
           <div className="flex items-center gap-6 pl-6">
             <Link href="/" className="flex items-center gap-2">
-              <CustomImage
+              <Image
                 src="/8BETbanner.png"
                 alt="8BET Logo"
                 width={300}
@@ -101,7 +110,7 @@ export default function CashierPage() {
                         value="8bet"
                         className="data-[state=active]:bg-[#63e211] data-[state=active]:text-black flex items-center gap-2 font-press-start-2p"
                       >
-                        <CustomImage
+                        <Image
                           src="/wagiebetlogocoin1.png"
                           alt="8BET"
                           width={24}
@@ -182,7 +191,7 @@ export default function CashierPage() {
                         value="8bet"
                         className="data-[state=active]:bg-[#63e211] data-[state=active]:text-black flex items-center gap-2 font-press-start-2p"
                       >
-                        <CustomImage
+                        <Image
                           src="/wagiebetlogocoin1.png"
                           alt="8BET"
                           width={24}

@@ -1,7 +1,7 @@
-import { ethers, HDNodeWallet } from 'ethers'
+import { ethers } from 'ethers'
 
 export class WalletService {
-  private wallet: HDNodeWallet | null = null
+  private wallet: ethers.Wallet | null = null
   
   // Generate a new wallet
   createWallet(): string {
@@ -28,7 +28,7 @@ export class WalletService {
     if (!encrypted) return false
 
     try {
-      this.wallet = await ethers.Wallet.fromEncryptedJson(encrypted, password) as HDNodeWallet
+      this.wallet = await ethers.Wallet.fromEncryptedJson(encrypted, password)
       return true
     } catch (error) {
       console.error('Error loading wallet:', error)

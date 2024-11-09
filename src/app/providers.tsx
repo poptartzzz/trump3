@@ -1,56 +1,85 @@
 'use client'
 
-import { createContext, useContext, useState } from 'react'
-import { ethers } from 'ethers'
+import { createContext, useContext, useState, useEffect } from 'react'
 
 interface WalletContextType {
-  address: string | null
   isConnected: boolean
+  address: string | null
   connect: () => Promise<void>
   disconnect: () => void
 }
 
 const WalletContext = createContext<WalletContextType>({
-  address: null,
   isConnected: false,
+  address: null,
   connect: async () => {},
-  disconnect: () => {},
+  disconnect: () => {}
 })
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function WalletProvider({ children }: { children: React.ReactNode }) {
+  const [isConnected, setIsConnected] = useState(false)
   const [address, setAddress] = useState<string | null>(null)
 
   const connect = async () => {
-    if (typeof window.ethereum !== 'undefined') {
-      try {
-        const provider = new ethers.BrowserProvider(window.ethereum)
-        const signer = await provider.getSigner()
-        const address = await signer.getAddress()
-        setAddress(address)
-      } catch (error) {
-        console.error('Error connecting wallet:', error)
+    try {
+      if (typeof window.ethereum !== 'undefined') {
+        const accounts = await window.ethereum.request({ 
+          method: 'eth_requestAccounts' 
+        }) as string[];
+        
+        if (accounts && accounts.length > 0) {
+          setAddress(accounts[0])
+          setIsConnected(true)
+        }
+      } else {
+        console.log('Please install MetaMask!')
       }
-    } else {
-      alert('Please install MetaMask!')
+    } catch (error) {
+      console.error('Error connecting wallet:', error)
     }
   }
 
   const disconnect = () => {
+    setIsConnected(false)
     setAddress(null)
   }
 
+  useEffect(() => {
+    if (typeof window.ethereum !== 'undefined') {
+      const handleAccountsChanged = (...args: unknown[]) => {
+        const accounts = args[0] as string[];
+        if (accounts && accounts.length > 0) {
+          setAddress(accounts[0])
+          setIsConnected(true)
+        } else {
+          setAddress(null)
+          setIsConnected(false)
+        }
+      }
+
+      window.ethereum.on('accountsChanged', handleAccountsChanged)
+
+      // Check if already connected
+      window.ethereum.request({ method: 'eth_accounts' })
+        .then((accounts: unknown) => {
+          const ethAccounts = accounts as string[];
+          if (ethAccounts && ethAccounts.length > 0) {
+            setAddress(ethAccounts[0])
+            setIsConnected(true)
+          }
+        })
+
+      return () => {
+        window.ethereum.removeListener('accountsChanged', handleAccountsChanged)
+      }
+    }
+  }, [])
+
   return (
-    <WalletContext.Provider value={{
-      address,
-      isConnected: !!address,
-      connect,
-      disconnect,
-    }}>
+    <WalletContext.Provider value={{ isConnected, address, connect, disconnect }}>
       {children}
     </WalletContext.Provider>
   )
 }
 
-export function useWallet() {
-  return useContext(WalletContext)
-} 
+export const useWallet = () => useContext(WalletContext)

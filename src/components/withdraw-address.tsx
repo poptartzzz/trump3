@@ -15,7 +15,7 @@ interface WithdrawAddressProps {
   balance: string
 }
 
-export function WithdrawAddress({ tokenName, tokenAddress, network, icon, balance }: WithdrawAddressProps) {
+export default function WithdrawAddress({ tokenName, tokenAddress, network, icon, balance }: WithdrawAddressProps) {
   const [amount, setAmount] = useState('')
   const [address, setAddress] = useState('')
 

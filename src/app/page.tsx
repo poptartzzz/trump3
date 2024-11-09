@@ -17,7 +17,8 @@ import {
   MessageCircle,
   Twitter,
   Flame,
-  Banknote
+  Banknote,
+  Copy
 } from 'lucide-react'
 import { 
   Card,
@@ -26,6 +27,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { usePriceStore } from "@/lib/price-service"
+import { formatPrice } from '@/lib/format-price';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const pressStart2P = Press_Start_2P({ 
   weight: '400',
@@ -34,7 +37,9 @@ const pressStart2P = Press_Start_2P({
 })
 
 export default function Home() {
-  const { prices, volume24h, holders } = usePriceStore()
+  const { prices, volume24h, previousPrices } = usePriceStore()
+
+  console.log('Price data:', { prices, volume24h, previousPrices });
 
   return (
     <div className={`min-h-screen bg-black text-[#63e211] ${pressStart2P.variable} flex flex-col`}>
@@ -94,11 +99,35 @@ export default function Home() {
                 />
                 <div>
                   <div className="font-semibold font-press-start-2p text-[#63e211]">8BET Coin</div>
-                  <div className="text-sm text-red-400">-6.13%</div>
+                  <div className="flex items-center gap-1">
+                    <div className="text-sm text-[#63e211]/70">
+                      ${formatPrice(prices['8BET'])}
+                    </div>
+                    <AnimatePresence>
+                      {prices['8BET'] > previousPrices['8BET'] ? (
+                        <motion.div
+                          key="up"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0 }}
+                          className="text-[#63e211] text-[8px]"
+                        >
+                          ▲
+                        </motion.div>
+                      ) : prices['8BET'] < previousPrices['8BET'] ? (
+                        <motion.div
+                          key="down"
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0 }}
+                          className="text-[#63e211] text-[8px]"
+                        >
+                          ▼
+                        </motion.div>
+                      ) : null}
+                    </AnimatePresence>
+                  </div>
                 </div>
-              </div>
-              <div className="text-[10px] text-[#63e211]/70 font-mono">
-                0x...Coming soon
               </div>
             </div>
           </div>
@@ -316,49 +345,63 @@ export default function Home() {
                   height={48}
                   width={48}
                 />
-                <div>
+                <div className="flex-1">
                   <div className="flex items-center gap-3">
                     <h2 className="text-xl lg:text-2xl font-bold text-[#63e211] font-press-start-2p">8BET COIN</h2>
                   </div>
-                  <div className="text-xs lg:text-sm text-[#63e211]">
-                    Coin Price: ${prices['8bet'].toFixed(6)} • 24h Volume: ${volume24h.toLocaleString()} • Holders: {holders.toLocaleString()}
+                  <div className="text-xs lg:text-sm text-[#63e211] font-press-start-2p">
+                    Coin Price: ${formatPrice(prices['8BET'])} USD • 24h Volume: ${formatPrice(volume24h)}
+                  </div>
+                  <div 
+                    onClick={() => navigator.clipboard.writeText('0xbeac671ee661461b7fcd786ece1b2f37af2a99f8')}
+                    className="mt-2 flex items-center gap-2 text-[12px] text-[#63e211]/70 font-press-start-2p bg-black/30 px-3 py-1.5 rounded cursor-pointer hover:bg-black/40 transition-colors w-fit"
+                  >
+                    0xbeac671ee661461b7fcd786ece1b2f37af2a99f8
+                    <Copy className="h-3 w-3" />
                   </div>
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6">
               <div>
-                <div className="text-xs lg:text-sm text-[#63e211]">24h Revenue</div>
-                <div className="text-xl lg:text-2xl font-bold text-[#63e211] font-press-start-2p">$0.00</div>
-                <div className="text-xs lg:text-sm text-orange-400">↑ 0.00%</div>
+                <div className="text-xs lg:text-sm text-[#63e211] font-press-start-2p">24h Revenue</div>
+                <div className="text-xl lg:text-2xl font-bold text-[#63e211] font-press-start-2p leading-none mt-2">$0.00</div>
+                <div className="text-xs lg:text-sm text-orange-400 font-press-start-2p leading-none mt-2">↑ 0.00%</div>
               </div>
               <div>
-                <div className="text-xs lg:text-sm text-[#63e211]">24h Burnt</div>
-                <div className="text-xl lg:text-2xl font-bold text-[#63e211] font-press-start-2p">0</div>
-                <div className="text-xs lg:text-sm text-green-500 font-press-start-2p text-[#63e211]">$0.00</div>
+                <div className="text-xs lg:text-sm text-[#63e211] font-press-start-2p">8BET Burned</div>
+                <div className="text-xl lg:text-2xl font-bold text-[#63e211] font-press-start-2p leading-none mt-2">0</div>
+                <div className="text-xs lg:text-sm text-[#63e211] font-press-start-2p leading-none mt-2">$0.00</div>
+              </div>
+              <div>
+                <div className="text-xs lg:text-sm text-[#63e211] font-press-start-2p">Revenue Share</div>
+                <div className="text-xl lg:text-2xl font-bold text-[#63e211] font-press-start-2p leading-none mt-2">$0.00</div>
+                <div className="text-xs lg:text-sm text-[#63e211] font-press-start-2p leading-none mt-2">0.00%</div>
               </div>
             </div>
-            <div className="mt-4 text-[10px] text-[#63e211]/50 italic text-center">
-              Information updated every 30 minutes
-            </div>
-            <div className="mt-4 lg:mt-6 flex gap-4 flex-col sm:flex-row">
-              <Link 
-                href="https://uniswap.org/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button className="bg-[#63e211] text-black hover:bg-[#7fff00] shadow-md shadow-[#63e211]/20 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 font-press-start-2p">
-                  TRADE 8BET
-                </Button>
-              </Link>
-              <Link href="/account">
-                <Button 
-                  variant="outline" 
-                  className="border-[#ff6666] text-[#ff6666] hover:bg-[#ff6666]/20 font-press-start-2p"
+            <div className="flex justify-between items-center mt-4">
+              <div className="text-[10px] text-[#ff6666] italic font-press-start-2p">
+                Information updated every 30 minutes
+              </div>
+              <div className="flex gap-4 flex-col sm:flex-row">
+                <Link 
+                  href="https://uniswap.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  VIEW DASHBOARD
-                </Button>
-              </Link>
+                  <Button className="bg-[#63e211] text-black hover:bg-[#7fff00] shadow-md shadow-[#63e211]/20 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 font-press-start-2p">
+                    TRADE 8BET
+                  </Button>
+                </Link>
+                <Link href="/account">
+                  <Button 
+                    variant="outline" 
+                    className="border-[#ff6666] text-[#ff6666] hover:bg-[#ff6666]/20 font-press-start-2p"
+                  >
+                    VIEW DASHBOARD
+                  </Button>
+                </Link>
+              </div>
             </div>
           </section>
         </main>

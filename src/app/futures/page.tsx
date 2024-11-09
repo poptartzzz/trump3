@@ -2,11 +2,11 @@
 
 import { Press_Start_2P } from 'next/font/google'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowLeft, Wallet, TrendingUp, TrendingDown, Info } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { CustomImage } from "@/components/ui/custom-image"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { BalanceDropdown } from "@/components/balance-dropdown"
 import { useWallet } from '@/app/providers'
 import { usePriceStore } from '@/lib/price-service'
@@ -19,9 +19,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu"
-import Image from 'next/image'
 import eth32 from 'cryptocurrency-icons/32/color/eth.png'
 import btc32 from 'cryptocurrency-icons/32/color/btc.png'
+import { PriceChart } from '@/components/price-chart'
 
 const pressStart2P = Press_Start_2P({ 
   weight: '400',
@@ -29,24 +29,10 @@ const pressStart2P = Press_Start_2P({
   variable: '--font-press-start-2p'
 })
 
-interface Position {
-  type: 'LONG' | 'SHORT'
-  token: string
-  amount: string
-  leverage: string
-  entryPrice: string
-  liquidationPrice: string
-  timestamp: Date
-}
-
 export default function FuturesPage() {
   const { isConnected, connect } = useWallet()
-  const [positions, setPositions] = useState<Position[]>([])
-  const [amount, setAmount] = useState('')
-  const [leverage, setLeverage] = useState('1')
-  const [selectedCoin, setSelectedCoin] = useState('8BET')
-  const [customLeverage, setCustomLeverage] = useState('')
-  const { prices, fetchPrices } = usePriceStore()
+  const [selectedCoin, setSelectedCoin] = useState('ETH')
+  const { prices, chartData, fetchPrices } = usePriceStore()
 
   useEffect(() => {
     fetchPrices()
@@ -54,41 +40,24 @@ export default function FuturesPage() {
 
   const coins = [
     { 
-      name: '8BET', 
-      icon: '/wagiebetlogocoin1.png', 
-      price: formatPrice(prices['8bet']), 
-      change: '-6.13%' // Hardcoded for now
+      name: 'ETH',
+      icon: eth32.src,
+      price: formatPrice(prices.ethereum),
+      change: formatPriceChange(2.45)
     },
     { 
-      name: 'ETH', 
-      icon: eth32.src, 
-      price: formatPrice(prices.ethereum), 
-      change: formatPriceChange(2.45) // Example change
+      name: 'BTC',
+      icon: btc32.src,
+      price: formatPrice(prices.bitcoin),
+      change: formatPriceChange(1.23)
     },
     { 
-      name: 'BTC', 
-      icon: btc32.src, 
-      price: formatPrice(prices.bitcoin), 
-      change: formatPriceChange(1.23) // Example change
+      name: '8BET',
+      icon: '/wagiebetlogocoin1.png',
+      price: formatPrice(prices['8BET']),
+      change: '-6.13%'
     }
   ]
-
-  const handleTrade = (type: 'LONG' | 'SHORT') => {
-    if (!amount || !isConnected) return
-
-    const newPosition: Position = {
-      type,
-      token: '8BET',
-      amount,
-      leverage,
-      entryPrice: '$1.00', // Example price
-      liquidationPrice: type === 'LONG' ? '$0.50' : '$1.50', // Example prices
-      timestamp: new Date()
-    }
-
-    setPositions(prev => [newPosition, ...prev])
-    setAmount('')
-  }
 
   return (
     <div className={`min-h-screen bg-black text-[#63e211] ${pressStart2P.variable} font-press-start-2p`}>
@@ -144,7 +113,10 @@ export default function FuturesPage() {
         <div className="max-w-4xl mx-auto space-y-8">
           {/* Futures Content */}
           <div className={`transition-all duration-200 ${!isConnected ? 'blur-sm pointer-events-none' : ''}`}>
-            <h1 className="text-2xl font-press-start-2p text-[#63e211] mb-8 text-center">Futures Trading</h1>
+            <h1 className="text-2xl font-press-start-2p text-[#63e211] mb-2 text-center">Futures Trading</h1>
+            <div className="text-center text-[#ff6666] font-press-start-2p text-sm mb-8">
+              Releasing Late November 2024
+            </div>
 
             {/* Trading Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
@@ -169,7 +141,7 @@ export default function FuturesPage() {
             </div>
 
             {/* Trading Interface */}
-            <Card className="bg-gradient-to-br from-[#1a4d1a] to-[#0d260d] border-[#63e211]/20">
+            <Card className="bg-gradient-to-br from-[#1a4d1a] to-[#0d260d] border-[#63e211]/20 opacity-75">
               <CardHeader>
                 <CardTitle className="text-[#63e211] font-press-start-2p text-lg flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -210,6 +182,18 @@ export default function FuturesPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
+                <div className="h-[300px] bg-black/30 rounded-lg overflow-hidden">
+                  <PriceChart 
+                    data={chartData[
+                      selectedCoin === '8BET' ? '8BET' : 
+                      selectedCoin === 'ETH' ? 'ethereum' : 
+                      selectedCoin === 'BTC' ? 'bitcoin' : 
+                      '8BET'
+                    ]} 
+                  />
+                </div>
+
+                {/* Price Display */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-black/30 p-4 rounded-lg">
                   <div>
                     <div className="text-sm text-[#63e211]/80">Mark Price</div>
@@ -229,91 +213,25 @@ export default function FuturesPage() {
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm text-[#63e211]">
-                      <span>Amount (USD)</span>
-                      <span>Balance: $0.00</span>
-                    </div>
-                    <Input
-                      type="number"
-                      placeholder="0.00"
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
-                      className="bg-black/30 border-[#63e211]/20 text-[#63e211] font-press-start-2p"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm text-[#63e211]">
-                      <span>Leverage</span>
-                      <span>{customLeverage || leverage}x</span>
-                    </div>
-                    <div className="grid grid-cols-4 gap-2 mb-2">
-                      {['1', '3', '5', '10', '100', '1000'].map((x) => (
-                        <Button
-                          key={x}
-                          variant="outline"
-                          onClick={() => {
-                            setLeverage(x)
-                            setCustomLeverage('')
-                          }}
-                          className={`border-[#63e211]/20 text-[#63e211] hover:bg-[#63e211]/20 ${
-                            leverage === x && !customLeverage ? 'bg-[#63e211]/20' : ''
-                          }`}
-                        >
-                          {x}x
-                        </Button>
-                      ))}
-                    </div>
-                    <div className="flex gap-2">
-                      <Input
-                        type="number"
-                        placeholder="Custom leverage"
-                        value={customLeverage}
-                        onChange={(e) => {
-                          setCustomLeverage(e.target.value)
-                          setLeverage('')
-                        }}
-                        min="1"
-                        max="1000"
-                        className="bg-black/30 border-[#63e211]/20 text-[#63e211] font-press-start-2p"
-                      />
-                      <Button
-                        variant="outline"
-                        onClick={() => {
-                          if (customLeverage) {
-                            setLeverage(customLeverage)
-                            setCustomLeverage('')
-                          }
-                        }}
-                        className="border-[#63e211]/20 text-[#63e211] hover:bg-[#63e211]/20"
-                      >
-                        Set
-                      </Button>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <Button 
-                      onClick={() => handleTrade('LONG')}
-                      className="bg-green-500 text-black hover:bg-green-400 shadow-md"
-                      disabled={!amount}
-                    >
-                      <TrendingUp className="h-4 w-4 mr-2" />
-                      LONG
-                    </Button>
-                    <Button 
-                      onClick={() => handleTrade('SHORT')}
-                      className="bg-red-500 text-black hover:bg-red-400 shadow-md"
-                      disabled={!amount}
-                    >
-                      <TrendingDown className="h-4 w-4 mr-2" />
-                      SHORT
-                    </Button>
-                  </div>
+                {/* Trading Buttons */}
+                <div className="grid grid-cols-2 gap-4">
+                  <Button 
+                    className="bg-green-500/50 text-black cursor-not-allowed"
+                    disabled={true}
+                  >
+                    <TrendingUp className="h-4 w-4 mr-2" />
+                    LONG
+                  </Button>
+                  <Button 
+                    className="bg-red-500/50 text-black cursor-not-allowed"
+                    disabled={true}
+                  >
+                    <TrendingDown className="h-4 w-4 mr-2" />
+                    SHORT
+                  </Button>
                 </div>
 
+                {/* Info Section */}
                 <div className="bg-black/30 p-4 rounded-lg space-y-2">
                   <div className="flex items-start gap-2">
                     <Info className="h-4 w-4 flex-shrink-0 mt-1 text-[#63e211]" />
@@ -336,49 +254,9 @@ export default function FuturesPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {positions.length > 0 ? (
-                  <div className="space-y-4">
-                    {positions.map((position, i) => (
-                      <div key={i} className="bg-black/30 p-4 rounded-lg">
-                        <div className="flex justify-between items-center mb-2">
-                          <div className="flex items-center gap-2">
-                            <span className={`text-sm font-medium ${
-                              position.type === 'LONG' ? 'text-green-500' : 'text-red-500'
-                            }`}>
-                              {position.type}
-                            </span>
-                            <span className="text-sm text-[#63e211]">{position.token}</span>
-                          </div>
-                          <span className="text-xs text-[#63e211]/80">
-                            {position.timestamp.toLocaleTimeString()}
-                          </span>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <div className="text-xs text-[#63e211]/80">Size</div>
-                            <div className="text-sm text-[#63e211]">${position.amount}</div>
-                          </div>
-                          <div>
-                            <div className="text-xs text-[#63e211]/80">Leverage</div>
-                            <div className="text-sm text-[#63e211]">{position.leverage}x</div>
-                          </div>
-                          <div>
-                            <div className="text-xs text-[#63e211]/80">Entry Price</div>
-                            <div className="text-sm text-[#63e211]">{position.entryPrice}</div>
-                          </div>
-                          <div>
-                            <div className="text-xs text-[#63e211]/80">Liq. Price</div>
-                            <div className="text-sm text-[#63e211]">{position.liquidationPrice}</div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center text-sm text-[#63e211]/80 py-8">
-                    No open positions
-                  </div>
-                )}
+                <div className="text-center text-sm text-[#63e211]/80 py-8">
+                  No open positions
+                </div>
               </CardContent>
             </Card>
           </div>

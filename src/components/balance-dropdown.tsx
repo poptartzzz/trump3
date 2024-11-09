@@ -34,7 +34,7 @@ export function BalanceDropdown() {
   const { prices } = usePriceStore()
 
   const coins: CoinType[] = [
-    { name: '8BET', balance: '0.00', icon: '/wagiebetlogocoin1.png', price: prices['8bet'] },
+    { name: '8BET', balance: '0.00', icon: '/wagiebetlogocoin1.png', price: prices['8BET'] },
     { name: 'ETH', balance: '0.00', icon: eth32, price: prices.ethereum },
     { name: 'USDC', balance: '0.00', icon: usdc32, price: 1.00 }
   ]
