@@ -18,7 +18,8 @@ import {
   Twitter,
   Flame,
   Banknote,
-  Copy
+  Copy,
+  Timer
 } from 'lucide-react'
 import { 
   Card,
@@ -42,13 +43,13 @@ export default function Home() {
   console.log('Price data:', { prices, volume24h, previousPrices });
 
   return (
-    <div className={`min-h-screen bg-black text-[#63e211] ${pressStart2P.variable} flex flex-col`}>
+    <div className={`min-h-screen w-full bg-black text-[#63e211] ${pressStart2P.variable}`}>
       {/* Promo Banner */}
       <PromoBanner />
 
       {/* Top Navigation */}
-      <header className="border-b border-green-900/50 bg-black/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="flex h-20 items-center justify-between w-full">
+      <header className="w-full border-b border-green-900/50 bg-black/50 backdrop-blur-sm sticky top-0 z-50">
+        <div className="w-full flex h-20 items-center justify-between">
           <div className="flex items-center gap-6 pl-6">
             <Link href="#" className="flex items-center gap-2">
               <Image
@@ -81,17 +82,17 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Added mb-[30px] here */}
       <div className="mb-[30px]" />
 
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-[280px,1fr,340px] min-h-0">
+      {/* Main Content */}
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-[280px,1fr,340px] gap-6 min-h-0 bg-black w-full px-4 lg:px-6">
         {/* Sidebar Navigation */}
-        <aside className="space-y-4 lg:space-y-6 p-6">
+        <aside className="space-y-4 lg:space-y-6">
           <div className="space-y-2">
             <div className="flex flex-col gap-1 rounded-lg bg-gradient-to-br from-[#1a4d1a] to-[#0d260d] shadow-lg shadow-[#63e211]/10 px-3 py-2">
               <div className="flex items-center gap-2">
                 <Image
-                  src="/wagiebetlogocoin1.png"
+                  src="/8betdark.png"
                   alt="Currency icon"
                   className="rounded-full"
                   height={24}
@@ -240,7 +241,7 @@ export default function Home() {
         </aside>
 
         {/* Main Content */}
-        <main className="space-y-4 lg:space-y-6 min-h-0 p-6">
+        <main className="space-y-4 lg:space-y-6 min-h-0">
           {/* Wagering Games */}
           <section className="h-auto w-full">
             <div className="mb-4 flex items-center justify-between">
@@ -334,12 +335,54 @@ export default function Home() {
             </ScrollArea>
           </section>
 
+          {/* Lottery Section */}
+          <section className="h-auto w-full">
+            <div className="mb-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Timer className="h-4 w-4 text-[#63e211]" />
+                <h2 className="font-semibold text-[#63e211] font-press-start-2p">LOTTERY</h2>
+              </div>
+            </div>
+            <Card className="bg-gradient-to-br from-[#1a4d1a] to-[#0d260d] border-[#63e211]/20 relative overflow-hidden">
+              <div 
+                className="absolute inset-0 bg-cover bg-center opacity-30"
+                style={{ 
+                  backgroundImage: 'url(/8betrafflebanner.png)',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }}
+              />
+              <CardContent className="p-6 relative z-10">
+                <div className="flex flex-col items-center justify-center space-y-4">
+                  <div className="text-center space-y-4">
+                    <h3 className="text-lg font-press-start-2p text-[#63e211] mb-2">OPENING DAY LOTTERY</h3>
+                    <div className="space-y-2">
+                      <p className="text-sm text-[#ff6666] font-press-start-2p">
+                        All accounts will receive a free entry
+                      </p>
+                      <p className="text-xs text-[#ff6666] font-press-start-2p">
+                        Must hold 1000+ 8BET during snapshot
+                      </p>
+                    </div>
+                  </div>
+                  <Link href="/lottery">
+                    <Button 
+                      className="bg-[#63e211] text-black hover:bg-[#7fff00] shadow-md shadow-[#63e211]/20 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 font-press-start-2p"
+                    >
+                      ENTER LOTTERY
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          </section>
+
           {/* 8BET Coin Stats */}
           <section className="rounded-xl bg-gradient-to-br from-[#1a4d1a] to-[#0d260d] p-4 lg:p-6 backdrop-blur-sm shadow-xl shadow-[#63e211]/10 border border-[#63e211]/20">
             <div className="mb-4 lg:mb-6">
               <div className="flex items-center gap-4">
                 <Image
-                  src="/wagiebetlogocoin1.png"
+                  src="/8betdark.png"
                   alt="8BET Coin"
                   className="rounded-full"
                   height={48}
@@ -362,6 +405,8 @@ export default function Home() {
                 </div>
               </div>
             </div>
+
+            {/* Stats Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6">
               <div>
                 <div className="text-xs lg:text-sm text-[#63e211] font-press-start-2p">24h Revenue</div>
@@ -379,6 +424,22 @@ export default function Home() {
                 <div className="text-xs lg:text-sm text-[#63e211] font-press-start-2p leading-none mt-2">0.00%</div>
               </div>
             </div>
+
+            {/* DEXTools Chart */}
+            <div className="mt-6 bg-black/30 p-4 rounded-lg">
+              <div className="relative w-full h-[400px] overflow-hidden rounded-lg">
+                <iframe 
+                  id="dextools-widget"
+                  title="DEXTools Trading Chart"
+                  width="100%"
+                  height="400"
+                  src="https://www.dextools.io/widget-chart/en/ether/pe-light/0x0c3fdf9c70835f9be9db9585ecb6a1ee3f20a6c7?theme=light&chartType=2&chartResolution=30&drawingToolbars=false"
+                  className="absolute inset-0 border-0"
+                />
+              </div>
+            </div>
+
+            {/* Action Buttons */}
             <div className="flex justify-between items-center mt-4">
               <div className="text-[10px] text-[#ff6666] italic font-press-start-2p">
                 Information updated every 30 minutes
@@ -396,7 +457,7 @@ export default function Home() {
                 <Link href="/account">
                   <Button 
                     variant="outline" 
-                    className="border-[#ff6666] text-[#ff6666] hover:bg-[#ff6666]/20 font-press-start-2p"
+                    className="border-[#63e211]/20 bg-[#1a4d1a] text-[#63e211] hover:bg-[#63e211]/20 font-press-start-2p"
                   >
                     VIEW DASHBOARD
                   </Button>
@@ -407,7 +468,7 @@ export default function Home() {
         </main>
 
         {/* Troll Box Section */}
-        <aside className="hidden lg:block p-6">
+        <aside className="lg:block bg-black">
           <TrollBox />
         </aside>
       </div>

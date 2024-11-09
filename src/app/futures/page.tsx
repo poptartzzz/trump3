@@ -53,7 +53,7 @@ export default function FuturesPage() {
     },
     { 
       name: '8BET',
-      icon: '/wagiebetlogocoin1.png',
+      icon: '/8betdark.png',
       price: formatPrice(prices['8BET']),
       change: '-6.13%'
     }

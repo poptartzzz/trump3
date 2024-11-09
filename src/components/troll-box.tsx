@@ -5,57 +5,34 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Wallet, Send } from 'lucide-react'
+import { Send, Wallet } from 'lucide-react'
 import { useWallet } from '@/app/providers'
-import Pusher from 'pusher-js';
+import Pusher from 'pusher-js'
 
-const PUSHER_KEY = "181d264c0437add91668";
-const PUSHER_CLUSTER = "mt1";
-
-const pusher = new Pusher(PUSHER_KEY, {
-  cluster: PUSHER_CLUSTER
-});
-
-const channel = pusher.subscribe('chat');
-
-interface Message {
-  address: string
-  content: string
-  timestamp: Date
-}
-
-interface MessageResponse {
-  messages: {
-    address: string;
-    content: string;
-    timestamp: string;
-  }[];
+interface MessageData {
+  address: string;
+  content: string;
+  timestamp: string | Date;
 }
 
 export function TrollBox() {
-  const [messages, setMessages] = useState<Message[]>([])
+  const [messages, setMessages] = useState<MessageData[]>([])
   const [newMessage, setNewMessage] = useState('')
   const scrollRef = useRef<HTMLDivElement>(null)
   
-  const { address, isConnected, connect, disconnect } = useWallet()
+  const { address, isConnected, connect } = useWallet()
 
-  // Fetch message history on load
   useEffect(() => {
-    fetch('/api/chat')
-      .then(res => res.json())
-      .then((data: MessageResponse) => {
-        setMessages(data.messages.map(msg => ({
-          address: msg.address,
-          content: msg.content,
-          timestamp: new Date(msg.timestamp)
-        })));
-      });
-  }, []);
+    if (typeof window === 'undefined') return;
 
-  // Initialize Pusher connection
-  useEffect(() => {
-    // Listen for new messages
-    channel.bind('message', (data: Message) => {
+    // Initialize Pusher
+    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY || '181d264c0437add91668', {
+      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER || 'mt1'
+    });
+
+    const channel = pusher.subscribe('chat');
+    
+    channel.bind('message', (data: MessageData) => {
       setMessages(prev => [...prev, {
         address: data.address,
         content: data.content,
@@ -63,9 +40,21 @@ export function TrollBox() {
       }]);
     });
 
+    // Fetch message history
+    fetch('/api/chat')
+      .then(res => res.json())
+      .then(data => {
+        setMessages(data.messages.map((msg: MessageData) => ({
+          address: msg.address,
+          content: msg.content,
+          timestamp: new Date(msg.timestamp)
+        })));
+      });
+
     return () => {
       channel.unbind_all();
-      channel.unsubscribe();
+      pusher.unsubscribe('chat');
+      pusher.disconnect();
     };
   }, []);
 
@@ -85,7 +74,6 @@ export function TrollBox() {
       timestamp: new Date()
     };
 
-    // Send to API
     fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -99,18 +87,19 @@ export function TrollBox() {
     return `${addr.slice(0, 4)}..${addr.slice(-2)}`
   }
 
-  const formatTime = (date: Date) => {
-    return new Date(date).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+  const formatTime = (timestamp: string | Date) => {
+    const date = typeof timestamp === 'string' ? new Date(timestamp) : timestamp
+    return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
   }
 
   return (
-    <Card className="bg-gradient-to-br from-[#1a4d1a] to-[#0d260d] border-[#63e211]/20 h-full flex flex-col">
-      <CardHeader>
+    <Card className="bg-black border-[#63e211]/20 h-full flex flex-col relative z-10">
+      <CardHeader className="bg-gradient-to-br from-[#1a4d1a] to-[#0d260d] border-b border-[#63e211]/20">
         <div className="flex items-center justify-between">
           <CardTitle className="text-[#63e211] font-press-start-2p text-sm">TROLL BOX</CardTitle>
         </div>
       </CardHeader>
-      <CardContent className="space-y-4 flex-1 flex flex-col">
+      <CardContent className="space-y-4 flex-1 flex flex-col bg-gradient-to-br from-[#1a4d1a] to-[#0d260d] p-4">
         <ScrollArea className="flex-1 w-full rounded-md border border-[#63e211]/20 bg-black/30 p-4">
           <div ref={scrollRef} className="space-y-4">
             {messages.map((msg, i) => (
@@ -155,18 +144,15 @@ export function TrollBox() {
           </div>
         )}
 
-        <Button 
-          onClick={isConnected ? disconnect : connect}
-          variant={isConnected ? "outline" : "default"}
-          className={`w-full flex items-center gap-2 font-press-start-2p ${
-            isConnected 
-              ? "border-[#63e211]/20 text-[#63e211] hover:bg-[#63e211]/20" 
-              : "bg-[#63e211] text-black hover:bg-[#7fff00] shadow-md shadow-[#63e211]/20"
-          }`}
-        >
-          <Wallet className="h-4 w-4" />
-          {isConnected ? formatAddress(address as string) : "CONNECT WALLET"}
-        </Button>
+        {!isConnected && (
+          <Button 
+            onClick={() => connect()}
+            className="bg-[#63e211] text-black hover:bg-[#7fff00] shadow-md shadow-[#63e211]/20 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 font-press-start-2p flex items-center gap-2"
+          >
+            <Wallet className="h-4 w-4" />
+            CONNECT WALLET
+          </Button>
+        )}
       </CardContent>
     </Card>
   )

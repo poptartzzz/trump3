@@ -111,7 +111,7 @@ export default function CashierPage() {
                         className="data-[state=active]:bg-[#63e211] data-[state=active]:text-black flex items-center gap-2 font-press-start-2p"
                       >
                         <Image
-                          src="/wagiebetlogocoin1.png"
+                          src="/8betdark.png"
                           alt="8BET"
                           width={24}
                           height={24}
@@ -153,7 +153,7 @@ export default function CashierPage() {
                           tokenName="8BET"
                           tokenAddress="0x8bet...contract"
                           network="Ethereum"
-                          icon="/wagiebetlogocoin1.png"
+                          icon="/8betdark.png"
                         />
                       </div>
                     </TabsContent>
@@ -192,7 +192,7 @@ export default function CashierPage() {
                         className="data-[state=active]:bg-[#63e211] data-[state=active]:text-black flex items-center gap-2 font-press-start-2p"
                       >
                         <Image
-                          src="/wagiebetlogocoin1.png"
+                          src="/8betdark.png"
                           alt="8BET"
                           width={24}
                           height={24}
@@ -234,7 +234,7 @@ export default function CashierPage() {
                           tokenName="8BET"
                           tokenAddress="0xF4b7B9ab55A2eeb3bD6123B8f45B0abfFd5089c7"
                           network="Ethereum"
-                          icon="/wagiebetlogocoin1.png"
+                          icon="/8betdark.png"
                           balance="0.00"
                         />
                       </div>
