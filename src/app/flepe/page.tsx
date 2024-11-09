@@ -3,7 +3,7 @@
 import { Press_Start_2P } from 'next/font/google'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowLeft, Wallet, Gamepad2, Trophy, Timer, AlertCircle, DollarSign } from 'lucide-react'
+import { ArrowLeft, Wallet, Gamepad2, Trophy, Timer, AlertCircle, DollarSign, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BalanceDropdown } from "@/components/balance-dropdown"
@@ -103,18 +103,25 @@ export default function FLEPEPage() {
           {/* Game Container - Blurred */}
           <Card className="bg-gradient-to-br from-[#1a4d1a] to-[#0d260d] border-[#63e211]/20">
             <CardHeader>
-              <CardTitle className="text-[#63e211] font-press-start-2p text-lg flex items-center gap-2">
-                <Gamepad2 className="h-4 w-4" />
-                Game Area
+              <CardTitle className="text-[#ff6666] font-press-start-2p text-sm flex items-center gap-2">
+                <AlertCircle className="h-4 w-4" />
+                Wager at your own risk!
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="relative w-full aspect-[4/3] bg-black/30 rounded-lg overflow-hidden blur-sm pointer-events-none">
+              <div className="relative w-full aspect-[4/3] bg-black/30 rounded-lg overflow-hidden">
                 <iframe 
                   src="https://i.simmer.io/@gameboy11/flappy-pepe-crypto-game" 
-                  className="absolute inset-0 w-full h-full"
+                  className="absolute inset-0 w-full h-full blur-sm pointer-events-none"
                   style={{ border: 'none' }}
                 />
+                {/* Loading Overlay */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 z-10">
+                  <Loader2 className="h-8 w-8 text-[#63e211] animate-spin mb-4" />
+                  <div className="text-[#63e211] font-press-start-2p text-sm">
+                    Waiting to Confirm Wager
+                  </div>
+                </div>
               </div>
 
               {/* Wager Section */}
@@ -146,6 +153,15 @@ export default function FLEPEPage() {
                       Please fund your WEB wallet at the cashier
                     </div>
                     
+                    <Link href="/flepedemo" className="block mt-6">
+                      <Button 
+                        variant="outline"
+                        className="w-full border-[#ff6666] bg-[#ff6666]/20 text-[#ff6666] hover:bg-[#ff6666]/30 font-press-start-2p"
+                      >
+                        Want to practice first? Play in DEMO mode
+                      </Button>
+                    </Link>
+                    
                     {showBalanceError && (
                       <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-lg text-center text-sm animate-fade-in">
                         <div className="flex items-center justify-center gap-2">
@@ -153,7 +169,7 @@ export default function FLEPEPage() {
                           <span>Insufficient balance</span>
                         </div>
                         <Link href="/cashier" className="text-[#63e211] hover:underline mt-2 block">
-                          Fund your wallet in the cashier
+                          Fund your wallet at the cashier
                         </Link>
                       </div>
                     )}

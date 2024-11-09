@@ -151,7 +151,7 @@ export default function CashierPage() {
                       <div className="mt-6">
                         <DepositAddress 
                           tokenName="8BET"
-                          tokenAddress="0x8bet...contract"
+                          tokenAddress="0x9fC6Dc9Aba221e2260527CFA9e2564525D451093"
                           network="Ethereum"
                           icon="/8betdark.png"
                         />
@@ -232,7 +232,7 @@ export default function CashierPage() {
                       <div className="mt-6">
                         <WithdrawAddress 
                           tokenName="8BET"
-                          tokenAddress="0xF4b7B9ab55A2eeb3bD6123B8f45B0abfFd5089c7"
+                          tokenAddress="0x9fC6Dc9Aba221e2260527CFA9e2564525D451093"
                           network="Ethereum"
                           icon="/8betdark.png"
                           balance="0.00"

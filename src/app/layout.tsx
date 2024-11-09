@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Press_Start_2P } from 'next/font/google'
 import './globals.css'
 import { WalletProvider } from './providers'
+import { Footer } from '@/components/footer'
 
 const pressStart2P = Press_Start_2P({ 
   weight: '400',
@@ -20,10 +21,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={pressStart2P.variable}>
+    <html lang="en" className="bg-black">
+      <body className={`${pressStart2P.variable} bg-black min-h-screen`}>
         <WalletProvider>
-          {children}
+          <div className="min-h-screen flex flex-col bg-black">
+            {children}
+            <Footer />
+          </div>
         </WalletProvider>
       </body>
     </html>

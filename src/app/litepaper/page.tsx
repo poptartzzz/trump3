@@ -309,9 +309,14 @@ export default function LitepaperPage() {
                 <li>Zero buy/sell tax</li>
                 <li>Minimal team allocation (2%)</li>
               </ul>
-              <p>
-                The initial 3-month liquidity lock provides a foundation of trust, with the team committed to extending the lock period based on platform growth and revenue metrics. This approach balances security with the flexibility needed for long-term development.
-              </p>
+              <div className="bg-black/20 p-4 rounded-lg mt-4">
+                <div className="text-xs text-[#63e211]/80 font-press-start-2p">
+                  Contract Address:
+                  <code className="ml-2 bg-black/20 px-2 py-1 rounded break-all">
+                    0x9fC6Dc9Aba221e2260527CFA9e2564525D451093
+                  </code>
+                </div>
+              </div>
             </CardContent>
           </Card>
 

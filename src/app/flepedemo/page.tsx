@@ -103,7 +103,7 @@ export default function FLEPEDemoPage() {
               </div>
 
               {/* Ready to Play Button */}
-              <Link href="/">
+              <Link href="/flepe">
                 <Button 
                   className="w-full bg-[#63e211] text-black hover:bg-[#7fff00] shadow-md shadow-[#63e211]/20 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 font-press-start-2p"
                 >

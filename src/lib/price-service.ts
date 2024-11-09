@@ -23,17 +23,15 @@ interface PriceState {
   fetchPrices: () => Promise<void>
 }
 
+const defaultPrices = {
+  '8BET': 0.000001,
+  ethereum: 3500,
+  bitcoin: 65000
+}
+
 export const usePriceStore = create<PriceState>((set, get) => ({
-  prices: {
-    '8BET': 0,
-    ethereum: 0,
-    bitcoin: 0
-  },
-  previousPrices: {
-    '8BET': 0,
-    ethereum: 0,
-    bitcoin: 0
-  },
+  prices: { ...defaultPrices },
+  previousPrices: { ...defaultPrices },
   chartData: {
     '8BET': [],
     ethereum: [],
@@ -80,67 +78,78 @@ export const usePriceStore = create<PriceState>((set, get) => ({
         });
       };
 
-      // Fetch 8BET price from DexScreener
-      const tokenResponse = await fetch(
-        `https://api.dexscreener.com/latest/dex/tokens/${TOKEN_ADDRESS}`
-      );
-      const tokenData = await tokenResponse.json();
-
-      // Fetch ETH and BTC prices from CoinGecko
-      const cgResponse = await fetch(
-        'https://api.coingecko.com/api/v3/simple/price?ids=ethereum,bitcoin&vs_currencies=usd'
-      );
-      const cgData = await cgResponse.json();
-
-      const tokenPrice = tokenData.pairs?.[0]?.priceUsd || 0.000001;
-      const ethPrice = cgData.ethereum?.usd || 3500;
-      const btcPrice = cgData.bitcoin?.usd || 65000;
-
-      const tokenChartData = generateChartData(tokenPrice, true);
-      const ethChartData = generateChartData(ethPrice);
-      const btcChartData = generateChartData(btcPrice);
-
-      set({
-        prices: {
-          '8BET': tokenPrice,
-          ethereum: ethPrice,
-          bitcoin: btcPrice
-        },
-        chartData: {
-          '8BET': tokenChartData,
-          ethereum: ethChartData,
-          bitcoin: btcChartData
-        },
-        volume24h: tokenData.pairs?.[0]?.volume?.h24 || 0,
-        burned: 0
-      });
-
-      console.log('Updated with data:', {
-        token: tokenPrice,
-        eth: ethPrice,
-        btc: btcPrice,
-        charts: {
-          '8BET': tokenChartData.length,
-          ethereum: ethChartData.length,
-          bitcoin: btcChartData.length
+      try {
+        // Fetch 8BET price from DexScreener
+        const tokenResponse = await fetch(
+          `https://api.dexscreener.com/latest/dex/tokens/${TOKEN_ADDRESS}`
+        );
+        
+        if (!tokenResponse.ok) {
+          throw new Error('Failed to fetch token price');
         }
-      });
+
+        const tokenData = await tokenResponse.json();
+
+        // Fetch ETH and BTC prices from CoinGecko
+        const cgResponse = await fetch(
+          'https://api.coingecko.com/api/v3/simple/price?ids=ethereum,bitcoin&vs_currencies=usd'
+        );
+
+        if (!cgResponse.ok) {
+          throw new Error('Failed to fetch crypto prices');
+        }
+
+        const cgData = await cgResponse.json();
+
+        const tokenPrice = tokenData?.pairs?.[0]?.priceUsd || defaultPrices['8BET'];
+        const ethPrice = cgData?.ethereum?.usd || defaultPrices.ethereum;
+        const btcPrice = cgData?.bitcoin?.usd || defaultPrices.bitcoin;
+
+        const tokenChartData = generateChartData(tokenPrice, true);
+        const ethChartData = generateChartData(ethPrice);
+        const btcChartData = generateChartData(btcPrice);
+
+        set({
+          prices: {
+            '8BET': tokenPrice,
+            ethereum: ethPrice,
+            bitcoin: btcPrice
+          },
+          chartData: {
+            '8BET': tokenChartData,
+            ethereum: ethChartData,
+            bitcoin: btcChartData
+          },
+          volume24h: tokenData?.pairs?.[0]?.volume?.h24 || 0,
+          burned: 0
+        });
+
+      } catch (error) {
+        console.warn('API fetch failed, using fallback data:', error);
+        // Use default values on API failure
+        set({
+          prices: { ...defaultPrices },
+          chartData: {
+            '8BET': generateChartData(defaultPrices['8BET'], true),
+            ethereum: generateChartData(defaultPrices.ethereum),
+            bitcoin: generateChartData(defaultPrices.bitcoin)
+          },
+          volume24h: 0,
+          burned: 0
+        });
+      }
 
     } catch (error) {
       console.error('Error in fetchPrices:', error);
-      // Use empty arrays for chart data on error
+      // Use default values on any error
       set({
-        prices: {
-          '8BET': 0.000001,
-          ethereum: 3500,
-          bitcoin: 65000
-        },
+        prices: { ...defaultPrices },
         chartData: {
           '8BET': [],
           ethereum: [],
           bitcoin: []
         },
-        volume24h: 1000,
+        volume24h: 0,
         burned: 0
       });
     }
@@ -150,11 +159,11 @@ export const usePriceStore = create<PriceState>((set, get) => ({
 // Initial fetch with delay to avoid hydration issues
 if (typeof window !== 'undefined') {
   setTimeout(() => {
-    usePriceStore.getState().fetchPrices();
+    usePriceStore.getState().fetchPrices().catch(console.error);
   }, 1000);
   
   // Then update every 30 seconds
   setInterval(() => {
-    usePriceStore.getState().fetchPrices();
+    usePriceStore.getState().fetchPrices().catch(console.error);
   }, 30000);
 } 

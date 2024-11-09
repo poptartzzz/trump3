@@ -9,14 +9,14 @@ import { Send, Wallet } from 'lucide-react'
 import { useWallet } from '@/app/providers'
 import Pusher from 'pusher-js'
 
-interface MessageData {
-  address: string;
-  content: string;
-  timestamp: string | Date;
+interface Message {
+  address: string
+  content: string
+  timestamp: string | Date
 }
 
 export function TrollBox() {
-  const [messages, setMessages] = useState<MessageData[]>([])
+  const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState('')
   const scrollRef = useRef<HTMLDivElement>(null)
   
@@ -32,7 +32,7 @@ export function TrollBox() {
 
     const channel = pusher.subscribe('chat');
     
-    channel.bind('message', (data: MessageData) => {
+    channel.bind('message', (data: Message) => {
       setMessages(prev => [...prev, {
         address: data.address,
         content: data.content,
@@ -44,7 +44,7 @@ export function TrollBox() {
     fetch('/api/chat')
       .then(res => res.json())
       .then(data => {
-        setMessages(data.messages.map((msg: MessageData) => ({
+        setMessages(data.messages.map((msg: Message) => ({
           address: msg.address,
           content: msg.content,
           timestamp: new Date(msg.timestamp)

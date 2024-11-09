@@ -64,7 +64,11 @@ export default function Home() {
             </Link>
           </div>
           <div className="flex items-center gap-4 pr-6">
-            <BalanceDropdown />
+            <div className="flex items-center gap-2 bg-[#1a4d1a]/50 px-4 py-2 rounded-lg border border-[#63e211]/20">
+              <span className="text-[#63e211]/70 text-sm font-press-start-2p">WEB WALLET</span>
+              <div className="w-[1px] h-6 bg-[#63e211]/20" /> {/* Divider */}
+              <BalanceDropdown />
+            </div>
             <Link href="/account">
               <Button 
                 variant="outline"
@@ -207,12 +211,37 @@ export default function Home() {
             </nav>
           </div>
 
-          {/* SOCIALS Section */}
+          {/* Trading Section */}
+          <div className="space-y-1">
+            <h2 className="px-3 text-xs font-semibold text-[#63e211]/50 font-press-start-2p">Trading</h2>
+            <nav className="space-y-1">
+              <Link
+                href="https://app.uniswap.org/swap?outputCurrency=0x9fC6Dc9Aba221e2260527CFA9e2564525D451093&chain=ethereum"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-[#63e211] hover:bg-[#63e211]/20 hover:text-green-300 font-press-start-2p"
+              >
+                <ShoppingCart className="h-4 w-4" />
+                BUY 8BET
+              </Link>
+              <Link
+                href="https://dexscreener.com/ethereum/0x9fC6Dc9Aba221e2260527CFA9e2564525D451093"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-[#63e211] hover:bg-[#63e211]/20 hover:text-green-300 font-press-start-2p"
+              >
+                <LineChart className="h-4 w-4" />
+                Chart
+              </Link>
+            </nav>
+          </div>
+
+          {/* Socials Section */}
           <div className="space-y-1">
             <h2 className="px-3 text-xs font-semibold text-[#63e211]/50 font-press-start-2p">Socials</h2>
             <nav className="space-y-1">
               <Link
-                href="https://t.me/8beteth"
+                href="https://t.me/eightbeteth"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-[#63e211] hover:bg-[#63e211]/20 hover:text-green-300 font-press-start-2p"
@@ -221,20 +250,13 @@ export default function Home() {
                 Telegram
               </Link>
               <Link
-                href="https://x.com/8beteth"
+                href="https://x.com/eightbeteth"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-[#63e211] hover:bg-[#63e211]/20 hover:text-green-300 font-press-start-2p"
               >
                 <Twitter className="h-4 w-4" />
                 Twitter
-              </Link>
-              <Link
-                href="/litepaper"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-[#63e211] hover:bg-[#63e211]/20 hover:text-green-300 font-press-start-2p"
-              >
-                <FileText className="h-4 w-4" />
-                Litepaper
               </Link>
             </nav>
           </div>
@@ -256,8 +278,11 @@ export default function Home() {
                   { 
                     name: 'FLAPPY PEPE', 
                     amount: 3.65, 
-                    image: '/pepejumpimg.png',
-                    isLive: true 
+                    image: '/flyingpepethumb.gif',
+                    isLive: true,
+                    isNew: true,
+                    wagerLink: '/flepe',
+                    practiceLink: '/flepedemo'
                   },
                   { 
                     name: 'TANKZ', 
@@ -289,8 +314,14 @@ export default function Home() {
                           alt={`${game.name} thumbnail`}
                           className="object-cover"
                           fill
+                          priority={i === 0}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-green-900/80 to-transparent" />
+                        {game.isNew && (
+                          <div className="absolute top-2 left-2 bg-[#ff6666] px-2 py-1 rounded text-[8px] text-black font-press-start-2p">
+                            NEW
+                          </div>
+                        )}
                         {!game.isLive && (
                           <div className="absolute top-2 right-2 bg-black/80 px-2 py-1 rounded text-[8px] text-[#63e211] font-press-start-2p border border-[#63e211]/20">
                             COMING SOON
@@ -312,19 +343,23 @@ export default function Home() {
 
                         {/* Buttons */}
                         <div className="grid grid-cols-2 gap-2">
-                          <Button 
-                            className="bg-[#63e211] text-black hover:bg-[#7fff00] shadow-md shadow-[#63e211]/20 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 font-press-start-2p text-[10px]"
-                            disabled={!game.isLive}
-                          >
-                            WAGER
-                          </Button>
-                          <Button 
-                            variant="outline"
-                            className="border-[#ff6666] bg-[#ff6666]/20 text-[#ff6666] hover:bg-[#ff6666]/30 font-press-start-2p text-[10px]"
-                            disabled={!game.isLive}
-                          >
-                            PRACTICE
-                          </Button>
+                          <Link href={game.wagerLink || '#'}>
+                            <Button 
+                              className="bg-[#63e211] text-black hover:bg-[#7fff00] shadow-md shadow-[#63e211]/20 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 font-press-start-2p text-[10px] w-full"
+                              disabled={!game.isLive}
+                            >
+                              WAGER
+                            </Button>
+                          </Link>
+                          <Link href={game.practiceLink || '#'}>
+                            <Button 
+                              variant="outline"
+                              className="border-[#ff6666] bg-[#ff6666]/20 text-[#ff6666] hover:bg-[#ff6666]/30 font-press-start-2p text-[10px] w-full"
+                              disabled={!game.isLive}
+                            >
+                              PRACTICE
+                            </Button>
+                          </Link>
                         </div>
                       </div>
                     </CardContent>
@@ -396,10 +431,10 @@ export default function Home() {
                     Coin Price: ${formatPrice(prices['8BET'])} USD • 24h Volume: ${formatPrice(volume24h)}
                   </div>
                   <div 
-                    onClick={() => navigator.clipboard.writeText('0xbeac671ee661461b7fcd786ece1b2f37af2a99f8')}
+                    onClick={() => navigator.clipboard.writeText('0x9fC6Dc9Aba221e2260527CFA9e2564525D451093')}
                     className="mt-2 flex items-center gap-2 text-[12px] text-[#63e211]/70 font-press-start-2p bg-black/30 px-3 py-1.5 rounded cursor-pointer hover:bg-black/40 transition-colors w-fit"
                   >
-                    0xbeac671ee661461b7fcd786ece1b2f37af2a99f8
+                    0x9fC6Dc9Aba221e2260527CFA9e2564525D451093
                     <Copy className="h-3 w-3" />
                   </div>
                 </div>
@@ -433,7 +468,7 @@ export default function Home() {
                   title="DEXTools Trading Chart"
                   width="100%"
                   height="400"
-                  src="https://www.dextools.io/widget-chart/en/ether/pe-light/0x0c3fdf9c70835f9be9db9585ecb6a1ee3f20a6c7?theme=light&chartType=2&chartResolution=30&drawingToolbars=false"
+                  src="https://www.dextools.io/widget-chart/en/ether/pe-light/0x318ba85ca49a3b12d3cf9c72cc72b29316971802?theme=dark&chartType=2&chartResolution=30&drawingToolbars=false"
                   className="absolute inset-0 border-0"
                 />
               </div>
@@ -446,7 +481,7 @@ export default function Home() {
               </div>
               <div className="flex gap-4 flex-col sm:flex-row">
                 <Link 
-                  href="https://uniswap.org/"
+                  href="https://app.uniswap.org/swap?outputCurrency=0x9fC6Dc9Aba221e2260527CFA9e2564525D451093&chain=ethereum"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
