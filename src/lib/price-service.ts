@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-const TOKEN_ADDRESS = '0xbeac671ee661461b7fcd786ece1b2f37af2a99f8'.toLowerCase()
+const TOKEN_ADDRESS = '0x9fC6Dc9Aba221e2260527CFA9e2564525D451093'.toLowerCase()
 
 interface PriceState {
   prices: {

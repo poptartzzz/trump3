@@ -85,9 +85,9 @@ export default function FLEPEDemoPage() {
               {/* Game Container */}
               <div className="relative w-full aspect-[4/3] bg-black/30 rounded-lg overflow-hidden">
                 <iframe 
-                  src="https://i.simmer.io/@gameboy11/flappy-pepe-crypto-game" 
+                  src="https://i.simmer.io/@gameboy11/~09dbf1cc-74c0-7090-3497-0f382128d7e9" 
                   className="absolute inset-0 w-full h-full"
-                  style={{ border: 'none' }}
+                  style={{ border: '0' }}
                 />
               </div>
 

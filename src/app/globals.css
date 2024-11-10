@@ -34,3 +34,7 @@
   scrollbar-width: thin;
   scrollbar-color: #63e211 rgba(99, 226, 17, 0.1);
 }
+
+.glow-text {
+  text-shadow: 0 0 10px rgba(99, 226, 17, 0.5);
+}

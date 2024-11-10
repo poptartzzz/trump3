@@ -29,7 +29,6 @@ import { Button } from "@/components/ui/button"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { usePriceStore } from "@/lib/price-service"
 import { formatPrice } from '@/lib/format-price';
-import { motion, AnimatePresence } from 'framer-motion';
 
 const pressStart2P = Press_Start_2P({ 
   weight: '400',
@@ -105,32 +104,15 @@ export default function Home() {
                 <div>
                   <div className="font-semibold font-press-start-2p text-[#63e211]">8BET Coin</div>
                   <div className="flex items-center gap-1">
-                    <div className="text-sm text-[#63e211]/70">
+                    <div className={`text-sm font-press-start-2p ${
+                      prices['8BET'] > previousPrices['8BET'] 
+                        ? 'text-[#63e211]' 
+                        : prices['8BET'] < previousPrices['8BET'] 
+                          ? 'text-[#ff6666]' 
+                          : 'text-[#63e211]/70'
+                    }`}>
                       ${formatPrice(prices['8BET'])}
                     </div>
-                    <AnimatePresence>
-                      {prices['8BET'] > previousPrices['8BET'] ? (
-                        <motion.div
-                          key="up"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0 }}
-                          className="text-[#63e211] text-[8px]"
-                        >
-                          ▲
-                        </motion.div>
-                      ) : prices['8BET'] < previousPrices['8BET'] ? (
-                        <motion.div
-                          key="down"
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0 }}
-                          className="text-[#63e211] text-[8px]"
-                        >
-                          ▼
-                        </motion.div>
-                      ) : null}
-                    </AnimatePresence>
                   </div>
                 </div>
               </div>
@@ -172,9 +154,9 @@ export default function Home() {
             </nav>
           </div>
 
-          {/* 8BIT Token Section */}
+          {/* 8BET Token Section */}
           <div className="space-y-1">
-            <h2 className="px-3 text-xs font-semibold text-[#63e211]/50 font-press-start-2p">8bit Token</h2>
+            <h2 className="px-3 text-xs font-semibold text-[#63e211]/50 font-press-start-2p">8BET Token</h2>
             <nav className="space-y-1">
               <Link
                 href="/staking"
@@ -190,31 +172,6 @@ export default function Home() {
                 <FileText className="h-4 w-4" />
                 Litepaper
               </Link>
-              <Link
-                href="https://uniswap.org/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-[#63e211] hover:bg-[#63e211]/20 hover:text-green-300 font-press-start-2p"
-              >
-                <ShoppingCart className="h-4 w-4" />
-                Buy 8bet
-              </Link>
-              <Link
-                href="https://dexscreener.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-[#63e211] hover:bg-[#63e211]/20 hover:text-green-300 font-press-start-2p"
-              >
-                <LineChart className="h-4 w-4" />
-                Chart
-              </Link>
-            </nav>
-          </div>
-
-          {/* Trading Section */}
-          <div className="space-y-1">
-            <h2 className="px-3 text-xs font-semibold text-[#63e211]/50 font-press-start-2p">Trading</h2>
-            <nav className="space-y-1">
               <Link
                 href="https://app.uniswap.org/swap?outputCurrency=0x9fC6Dc9Aba221e2260527CFA9e2564525D451093&chain=ethereum"
                 target="_blank"
@@ -277,7 +234,7 @@ export default function Home() {
                 {[
                   { 
                     name: 'FLAPPY PEPE', 
-                    amount: 3.65, 
+                    amount: 3.6291, 
                     image: '/flyingpepethumb.gif',
                     isLive: true,
                     isNew: true,
@@ -428,14 +385,30 @@ export default function Home() {
                     <h2 className="text-xl lg:text-2xl font-bold text-[#63e211] font-press-start-2p">8BET COIN</h2>
                   </div>
                   <div className="text-xs lg:text-sm text-[#63e211] font-press-start-2p">
-                    Coin Price: ${formatPrice(prices['8BET'])} USD • 24h Volume: ${formatPrice(volume24h)}
+                    Coin Price: <span className={`${
+                      prices['8BET'] > previousPrices['8BET'] 
+                        ? 'text-[#63e211]' 
+                        : prices['8BET'] < previousPrices['8BET'] 
+                          ? 'text-[#ff6666]' 
+                          : 'text-[#63e211]'
+                    }`}>${formatPrice(prices['8BET'])}</span> USD • 24h Volume: ${formatPrice(volume24h)}
                   </div>
-                  <div 
-                    onClick={() => navigator.clipboard.writeText('0x9fC6Dc9Aba221e2260527CFA9e2564525D451093')}
-                    className="mt-2 flex items-center gap-2 text-[12px] text-[#63e211]/70 font-press-start-2p bg-black/30 px-3 py-1.5 rounded cursor-pointer hover:bg-black/40 transition-colors w-fit"
-                  >
-                    0x9fC6Dc9Aba221e2260527CFA9e2564525D451093
-                    <Copy className="h-3 w-3" />
+                  <div className="flex items-center gap-4">
+                    <div 
+                      onClick={() => navigator.clipboard.writeText('0x9fC6Dc9Aba221e2260527CFA9e2564525D451093')}
+                      className="mt-2 flex items-center gap-2 text-[12px] text-[#63e211]/70 font-press-start-2p bg-black/30 px-3 py-1.5 rounded cursor-pointer hover:bg-black/40 transition-colors w-fit"
+                    >
+                      0x9fC6Dc9Aba221e2260527CFA9e2564525D451093
+                      <Copy className="h-3 w-3" />
+                    </div>
+                    <Link 
+                      href="https://app.uniswap.org/swap?outputCurrency=0x9fC6Dc9Aba221e2260527CFA9e2564525D451093&chain=ethereum"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-2 px-3 py-1.5 bg-[#ff6666]/20 text-[#ff6666] hover:bg-[#ff6666]/30 rounded text-[10px] font-press-start-2p transition-colors"
+                    >
+                      Buy 8BET on UNISWAP
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -468,35 +441,16 @@ export default function Home() {
                   title="DEXTools Trading Chart"
                   width="100%"
                   height="400"
-                  src="https://www.dextools.io/widget-chart/en/ether/pe-light/0x318ba85ca49a3b12d3cf9c72cc72b29316971802?theme=dark&chartType=2&chartResolution=30&drawingToolbars=false"
+                  src="https://www.dextools.io/widget-chart/en/ether/pe-light/0x9fC6Dc9Aba221e2260527CFA9e2564525D451093?theme=dark&chartType=1&chartResolution=30&drawingToolbars=true&headerColor=1a4d1a&tvPlatformColor=000000&tvPaneColor=0d260d&chartInUsd=true"
                   className="absolute inset-0 border-0"
                 />
               </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex justify-between items-center mt-4">
+            <div className="flex justify-start items-center mt-4">
               <div className="text-[10px] text-[#ff6666] italic font-press-start-2p">
                 Information updated every 30 minutes
-              </div>
-              <div className="flex gap-4 flex-col sm:flex-row">
-                <Link 
-                  href="https://app.uniswap.org/swap?outputCurrency=0x9fC6Dc9Aba221e2260527CFA9e2564525D451093&chain=ethereum"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button className="bg-[#63e211] text-black hover:bg-[#7fff00] shadow-md shadow-[#63e211]/20 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 font-press-start-2p">
-                    TRADE 8BET
-                  </Button>
-                </Link>
-                <Link href="/account">
-                  <Button 
-                    variant="outline" 
-                    className="border-[#63e211]/20 bg-[#1a4d1a] text-[#63e211] hover:bg-[#63e211]/20 font-press-start-2p"
-                  >
-                    VIEW DASHBOARD
-                  </Button>
-                </Link>
               </div>
             </div>
           </section>

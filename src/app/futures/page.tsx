@@ -183,14 +183,41 @@ export default function FuturesPage() {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="h-[300px] bg-black/30 rounded-lg overflow-hidden">
-                  <PriceChart 
-                    data={chartData[
-                      selectedCoin === '8BET' ? '8BET' : 
-                      selectedCoin === 'ETH' ? 'ethereum' : 
-                      selectedCoin === 'BTC' ? 'bitcoin' : 
-                      '8BET'
-                    ]} 
-                  />
+                  {selectedCoin === '8BET' ? (
+                    <iframe 
+                      id="dextools-widget"
+                      title="DEXTools Trading Chart"
+                      width="100%"
+                      height="300"
+                      src="https://www.dextools.io/widget-chart/en/ether/pe-light/0x9fC6Dc9Aba221e2260527CFA9e2564525D451093?theme=dark&chartType=1&chartResolution=30&drawingToolbars=true&headerColor=1a4d1a&tvPlatformColor=000000&tvPaneColor=0d260d&chartInUsd=true"
+                      className="w-full h-full border-0"
+                    />
+                  ) : selectedCoin === 'ETH' ? (
+                    <iframe 
+                      id="dextools-widget-eth"
+                      title="DEXTools ETH Trading Chart"
+                      width="100%"
+                      height="300"
+                      src="https://www.dextools.io/widget-chart/en/bnb/pe-light/0xf9878a5dd55edc120fde01893ea713a4f032229c?theme=dark&chartType=1&chartResolution=30&drawingToolbars=true&headerColor=1a4d1a&tvPlatformColor=000000&tvPaneColor=0d260d&chartInUsd=true"
+                      className="w-full h-full border-0"
+                    />
+                  ) : selectedCoin === 'BTC' ? (
+                    <iframe 
+                      id="dextools-widget-btc"
+                      title="DEXTools BTC Trading Chart"
+                      width="100%"
+                      height="300"
+                      src="https://www.dextools.io/widget-chart/en/ether/pe-light/0x4ab6702b3ed3877e9b1f203f90cbef13d663b0e8?theme=dark&chartType=1&chartResolution=30&drawingToolbars=true&headerColor=1a4d1a&tvPlatformColor=000000&tvPaneColor=0d260d&chartInUsd=true"
+                      className="w-full h-full border-0"
+                    />
+                  ) : (
+                    <PriceChart 
+                      data={chartData[
+                        selectedCoin === 'BTC' ? 'bitcoin' : 
+                        'ethereum'
+                      ]} 
+                    />
+                  )}
                 </div>
 
                 {/* Price Display */}

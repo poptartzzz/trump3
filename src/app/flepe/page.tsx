@@ -85,17 +85,16 @@ export default function FLEPEPage() {
                 Current Round
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-black/30 p-4 rounded-lg">
-                  <div className="text-sm text-[#63e211]/80 mb-2">Prize Pool</div>
-                  <div className="text-xl font-bold text-[#63e211]">$365.00</div>
-                  <div className="text-xs text-[#63e211]/50 mt-1">priced in 8BET token</div>
-                </div>
-                <div className="bg-black/30 p-4 rounded-lg">
-                  <div className="text-sm text-[#63e211]/80 mb-2">Current High Score</div>
-                  <div className="text-xl font-bold text-[#63e211]">28</div>
-                </div>
+            <CardContent className="space-y-6">
+              <div className="text-sm text-[#63e211]/80 leading-relaxed">
+                <p className="mb-4">
+                  Compete for the highest score in Flappy Pepe! Each round lasts until someone beats the current highscore. 
+                  The winner takes the entire prize pool.
+                </p>
+                <p className="mb-4">
+                  Each attempt costs $10 and you get one chance to set your best score. 
+                  Beat the current highscore to win the entire pot!
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -111,15 +110,40 @@ export default function FLEPEPage() {
             <CardContent className="space-y-4">
               <div className="relative w-full aspect-[4/3] bg-black/30 rounded-lg overflow-hidden">
                 <iframe 
-                  src="https://i.simmer.io/@gameboy11/flappy-pepe-crypto-game" 
+                  src="https://i.simmer.io/@gameboy11/flepe-wager" 
                   className="absolute inset-0 w-full h-full blur-sm pointer-events-none"
-                  style={{ border: 'none' }}
+                  style={{ border: '0' }}
                 />
                 {/* Loading Overlay */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 z-10">
-                  <Loader2 className="h-8 w-8 text-[#63e211] animate-spin mb-4" />
-                  <div className="text-[#63e211] font-press-start-2p text-sm">
-                    Waiting to Confirm Wager
+                <div className="absolute inset-0 flex flex-col items-center bg-black/50 z-10">
+                  {/* Centered loader and text */}
+                  <div className="absolute top-1/3 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+                    <Loader2 className="h-8 w-8 text-[#63e211] animate-spin mb-4" />
+                    <div className="text-[#63e211] font-press-start-2p text-sm">
+                      Waiting to Confirm Wager
+                    </div>
+                  </div>
+                  
+                  {/* Status Box */}
+                  <div className="absolute bottom-5 left-5 right-5 h-1/3 bg-[#1a4d1a] border-2 border-[#63e211]/50 rounded-lg">
+                    <div className="grid grid-cols-2 gap-8 text-sm h-full p-8 max-w-4xl mx-auto">
+                      <div className="text-center">
+                        <div className="text-[#63e211]/70 mb-4 uppercase tracking-wider text-xs">Highscore</div>
+                        <div className="text-[#63e211] font-bold text-3xl glow-text">28</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-[#63e211]/70 mb-4 uppercase tracking-wider text-xs">Current Pot</div>
+                        <div className="text-[#63e211] font-bold text-3xl glow-text">$362.91</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-[#63e211]/70 mb-4 uppercase tracking-wider text-xs">Players in Queue</div>
+                        <div className="text-[#63e211] font-bold text-3xl glow-text">0</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-[#63e211]/70 mb-4 uppercase tracking-wider text-xs">Est. Wait Time</div>
+                        <div className="text-[#63e211] font-bold text-3xl glow-text">0 min</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -212,7 +236,7 @@ export default function FLEPEPage() {
             </CardContent>
           </Card>
 
-          {/* Rules Card - Updated without prize distribution */}
+          {/* Rules Card */}
           <Card className="bg-gradient-to-br from-[#1a4d1a] to-[#0d260d] border-[#63e211]/20">
             <CardHeader>
               <CardTitle className="text-[#63e211] font-press-start-2p text-lg flex items-center gap-2">
