@@ -2,13 +2,12 @@
 
 import { Press_Start_2P } from 'next/font/google'
 import Link from 'next/link'
-import Image from 'next/image'
 import { ArrowLeft, Wallet, Trophy, Timer, AlertCircle, DollarSign, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { BalanceDropdown } from "@/components/balance-dropdown"
 import { useWallet } from '@/app/providers'
 import { useState } from 'react'
+import { Header } from "@/components/header"
 
 const pressStart2P = Press_Start_2P({ 
   weight: '400',
@@ -27,40 +26,7 @@ export default function FLEPEPage() {
 
   return (
     <div className={`min-h-screen bg-black text-[#63e211] ${pressStart2P.variable} font-press-start-2p`}>
-      {/* Header remains the same */}
-      <header className="border-b border-green-900/50 bg-black/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="flex h-20 items-center justify-between w-full">
-          <div className="flex items-center gap-6 pl-6">
-            <Link href="/" className="flex items-center gap-2">
-              <Image
-                src="/8BETbanner.png"
-                alt="8BET Logo"
-                width={300}
-                height={100}
-                className="h-20 w-auto"
-                priority
-                quality={100}
-              />
-            </Link>
-          </div>
-          <div className="flex items-center gap-4 pr-6">
-            <BalanceDropdown />
-            <Link href="/account">
-              <Button 
-                variant="outline"
-                className="border-[#63e211]/20 bg-[#1a4d1a] text-[#63e211] hover:bg-[#63e211]/20 font-press-start-2p"
-              >
-                ACCOUNT
-              </Button>
-            </Link>
-            <Link href="/cashier">
-              <Button className="bg-[#63e211] text-black hover:bg-[#7fff00] shadow-md shadow-[#63e211]/20 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 font-press-start-2p">
-                CASHIER
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <div className="mb-[30px]" />
 
@@ -170,7 +136,7 @@ export default function FLEPEPage() {
                       className="w-full bg-[#63e211] text-black hover:bg-[#7fff00] shadow-md shadow-[#63e211]/20 font-press-start-2p"
                     >
                       <DollarSign className="h-4 w-4 mr-2" />
-                      Buy 1 Wager (Cost $10, priced in USDC, ETH or 8BET)
+                      Buy 1 Wager (Cost $10, priced in USDC, ETH or 888)
                     </Button>
                     
                     <div className="text-center text-xs text-[#63e211]/80">
@@ -249,7 +215,7 @@ export default function FLEPEPage() {
                 <div className="space-y-4">
                   <h3 className="text-sm font-bold text-[#63e211]">Wager Information:</h3>
                   <ul className="list-disc pl-6 space-y-2">
-                    <li>Each wager costs $10 (payable in USDC, ETH or 8BET)</li>
+                    <li>Each wager costs $10 (payable in USDC, ETH or 888)</li>
                     <li>One attempt per wager</li>
                     <li>Score must be submitted within 5 minutes</li>
                     <li>Anti-cheat system enabled</li>

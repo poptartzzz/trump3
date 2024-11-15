@@ -8,7 +8,7 @@ import { ArrowLeft, Wallet } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useWallet } from '@/app/providers'
-import { BalanceDropdown } from "@/components/balance-dropdown"
+import { Header } from "@/components/header"
 import eth32 from 'cryptocurrency-icons/32/color/eth.png'
 import usdc32 from 'cryptocurrency-icons/32/color/usdc.png'
 
@@ -34,38 +34,7 @@ export default function CashierPage() {
 
   return (
     <div className={`min-h-screen bg-black text-[#63e211] ${pressStart2P.variable} font-press-start-2p`}>
-      {/* Header */}
-      <header className="border-b border-green-900/50 bg-black/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container max-w-[1400px] flex h-20 items-center justify-between px-0">
-          <div className="flex items-center gap-6 pl-6">
-            <Link href="/" className="flex items-center gap-2">
-              <Image
-                src="/8BETbanner.png"
-                alt="8BET Logo"
-                width={300}
-                height={100}
-                className="h-20 w-auto"
-                priority
-                quality={100}
-              />
-            </Link>
-          </div>
-          <div className="flex items-center gap-4 pr-6">
-            <BalanceDropdown />
-            <Link href="/account">
-              <Button 
-                variant="outline"
-                className="border-[#63e211]/20 bg-[#1a4d1a] text-[#63e211] hover:bg-[#63e211]/20 font-press-start-2p"
-              >
-                ACCOUNT
-              </Button>
-            </Link>
-            <Button className="bg-[#63e211] text-black hover:bg-[#7fff00] shadow-md shadow-[#63e211]/20 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 font-press-start-2p">
-              CASHIER
-            </Button>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Added mb-[30px] here */}
       <div className="mb-[30px]" />
@@ -104,20 +73,20 @@ export default function CashierPage() {
 
               <TabsContent value="deposit">
                 <div className="mt-6">
-                  <Tabs defaultValue="8bet" className="w-full">
+                  <Tabs defaultValue="888" className="w-full">
                     <TabsList className="grid w-full grid-cols-3 bg-[#1a4d1a] font-press-start-2p">
                       <TabsTrigger 
-                        value="8bet"
+                        value="888"
                         className="data-[state=active]:bg-[#63e211] data-[state=active]:text-black flex items-center gap-2 font-press-start-2p"
                       >
                         <Image
-                          src="/8betdark.png"
-                          alt="8BET"
+                          src="/8betlogodark.png"
+                          alt="888"
                           width={24}
                           height={24}
                           className="rounded-full"
                         />
-                        8BET
+                        888
                       </TabsTrigger>
                       <TabsTrigger 
                         value="eth"
@@ -147,13 +116,13 @@ export default function CashierPage() {
                       </TabsTrigger>
                     </TabsList>
                     
-                    <TabsContent value="8bet">
+                    <TabsContent value="888">
                       <div className="mt-6">
                         <DepositAddress 
-                          tokenName="8BET"
+                          tokenName="888"
                           tokenAddress="0x9fC6Dc9Aba221e2260527CFA9e2564525D451093"
                           network="Ethereum"
-                          icon="/8betdark.png"
+                          icon="/8betlogodark.png"
                         />
                       </div>
                     </TabsContent>
@@ -185,20 +154,20 @@ export default function CashierPage() {
 
               <TabsContent value="withdraw">
                 <div className="mt-6">
-                  <Tabs defaultValue="8bet" className="w-full">
+                  <Tabs defaultValue="888" className="w-full">
                     <TabsList className="grid w-full grid-cols-3 bg-[#1a4d1a] font-press-start-2p">
                       <TabsTrigger 
-                        value="8bet"
+                        value="888"
                         className="data-[state=active]:bg-[#63e211] data-[state=active]:text-black flex items-center gap-2 font-press-start-2p"
                       >
                         <Image
-                          src="/8betdark.png"
-                          alt="8BET"
+                          src="/8betlogodark.png"
+                          alt="888"
                           width={24}
                           height={24}
                           className="rounded-full"
                         />
-                        8BET
+                        888
                       </TabsTrigger>
                       <TabsTrigger 
                         value="eth"
@@ -228,13 +197,13 @@ export default function CashierPage() {
                       </TabsTrigger>
                     </TabsList>
                     
-                    <TabsContent value="8bet">
+                    <TabsContent value="888">
                       <div className="mt-6">
                         <WithdrawAddress 
-                          tokenName="8BET"
+                          tokenName="888"
                           tokenAddress="0x9fC6Dc9Aba221e2260527CFA9e2564525D451093"
                           network="Ethereum"
-                          icon="/8betdark.png"
+                          icon="/8betlogodark.png"
                           balance="0.00"
                         />
                       </div>

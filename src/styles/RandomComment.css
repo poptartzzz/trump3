@@ -1,0 +1,32 @@
+.random-comment-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: rgba(0, 0, 0, 0.9);
+    padding: 12px 24px;
+    border-radius: 8px;
+    color: white;
+    font-family: monospace;
+    animation: fadeInOut 8s ease-in-out;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    min-width: 200px;
+}
+
+.comment-address {
+    color: #00ff00;
+    margin-right: 8px;
+    font-weight: bold;
+}
+
+.comment-text {
+    color: #ffffff;
+    word-break: break-word;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(20px); }
+    15% { opacity: 1; transform: translateY(0); }
+    85% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-20px); }
+} 

@@ -5,9 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowLeft, Wallet, TrendingUp, TrendingDown, Info } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { CustomImage } from "@/components/ui/custom-image"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { BalanceDropdown } from "@/components/balance-dropdown"
 import { useWallet } from '@/app/providers'
 import { usePriceStore } from '@/lib/price-service'
 import { formatPrice, formatPriceChange } from '@/lib/format-price'
@@ -22,12 +20,20 @@ import {
 import eth32 from 'cryptocurrency-icons/32/color/eth.png'
 import btc32 from 'cryptocurrency-icons/32/color/btc.png'
 import { PriceChart } from '@/components/price-chart'
+import { Header } from "@/components/header"
 
 const pressStart2P = Press_Start_2P({ 
   weight: '400',
   subsets: ['latin'],
   variable: '--font-press-start-2p'
 })
+
+const formatChartData = (data: [number, number][]) => {
+  return data.map(([timestamp, value]) => ({
+    time: new Date(timestamp).toISOString(),
+    value: value
+  }));
+};
 
 export default function FuturesPage() {
   const { isConnected, connect } = useWallet()
@@ -52,49 +58,16 @@ export default function FuturesPage() {
       change: formatPriceChange(1.23)
     },
     { 
-      name: '8BET',
-      icon: '/8betdark.png',
-      price: formatPrice(prices['8BET']),
+      name: '888',
+      icon: '/8betlogodark.png',
+      price: formatPrice(prices['888']),
       change: '-6.13%'
     }
   ]
 
   return (
     <div className={`min-h-screen bg-black text-[#63e211] ${pressStart2P.variable} font-press-start-2p`}>
-      {/* Header */}
-      <header className="border-b border-green-900/50 bg-black/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="flex h-20 items-center justify-between w-full">
-          <div className="flex items-center gap-6 pl-6">
-            <Link href="/" className="flex items-center gap-2">
-              <CustomImage
-                src="/8BETbanner.png"
-                alt="8BET Logo"
-                width={300}
-                height={100}
-                className="h-20 w-auto"
-                priority
-                quality={100}
-              />
-            </Link>
-          </div>
-          <div className="flex items-center gap-4 pr-6">
-            <BalanceDropdown />
-            <Link href="/account">
-              <Button 
-                variant="outline"
-                className="border-[#63e211]/20 bg-[#1a4d1a] text-[#63e211] hover:bg-[#63e211]/20 font-press-start-2p"
-              >
-                ACCOUNT
-              </Button>
-            </Link>
-            <Link href="/cashier">
-              <Button className="bg-[#63e211] text-black hover:bg-[#7fff00] shadow-md shadow-[#63e211]/20 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 font-press-start-2p">
-                CASHIER
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Added mb-[30px] here */}
       <div className="mb-[30px]" />
@@ -183,7 +156,7 @@ export default function FuturesPage() {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="h-[300px] bg-black/30 rounded-lg overflow-hidden">
-                  {selectedCoin === '8BET' ? (
+                  {selectedCoin === '888' ? (
                     <iframe 
                       id="dextools-widget"
                       title="DEXTools Trading Chart"
@@ -212,10 +185,9 @@ export default function FuturesPage() {
                     />
                   ) : (
                     <PriceChart 
-                      data={chartData[
-                        selectedCoin === 'BTC' ? 'bitcoin' : 
-                        'ethereum'
-                      ]} 
+                      data={formatChartData(chartData[
+                        selectedCoin === 'BTC' ? 'bitcoin' : 'ethereum'
+                      ])} 
                     />
                   )}
                 </div>

@@ -1,0 +1,209 @@
+@keyframes flashingBorder {
+  0% { border-color: #63e211; }
+  25% { border-color: #ff6666; }
+  50% { border-color: #7fff00; }
+  75% { border-color: #00ffff; }
+  100% { border-color: #63e211; }
+}
+
+@keyframes flashingText {
+  0% { color: #63e211; }
+  50% { color: #ff6666; }
+  100% { color: #63e211; }
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-gradient {
+  background: linear-gradient(45deg, #000000, #0d260d, #1a4d1a, #0d260d, #000000);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+}
+
+.animate-pulse-border {
+  border: 1px solid #63e211;
+  animation: flashingBorder 4s linear infinite;
+}
+
+.flashing-text {
+  animation: flashingText 2s linear infinite;
+}
+
+/* Add rainbow effect for important text */
+.rainbow-text {
+  background: linear-gradient(
+    45deg,
+    #63e211,
+    #ff6666,
+    #7fff00,
+    #00ffff,
+    #63e211
+  );
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: rainbow 4s linear infinite;
+}
+
+@keyframes rainbow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Add glow effects */
+.glow {
+  text-shadow: 0 0 10px #63e211,
+               0 0 20px #63e211,
+               0 0 30px #63e211;
+}
+
+.hover-glow:hover {
+  text-shadow: 0 0 10px #63e211,
+               0 0 20px #63e211,
+               0 0 30px #63e211;
+  transition: all 0.3s ease;
+}
+
+/* Keep existing animations and add these new ones */
+
+@keyframes neonPulse {
+  0% { box-shadow: 0 0 5px #63e211, 0 0 10px #63e211, 0 0 15px #63e211; }
+  50% { box-shadow: 0 0 10px #ff6666, 0 0 20px #ff6666, 0 0 30px #ff6666; }
+  100% { box-shadow: 0 0 5px #63e211, 0 0 10px #63e211, 0 0 15px #63e211; }
+}
+
+@keyframes rainbowBorder {
+  0% { border-color: #63e211; }
+  20% { border-color: #ff6666; }
+  40% { border-color: #7fff00; }
+  60% { border-color: #00ffff; }
+  80% { border-color: #ff00ff; }
+  100% { border-color: #63e211; }
+}
+
+.rainbow-border {
+  border: 1px solid #63e211;
+  animation: rainbowBorder 2s linear infinite;
+}
+
+.neon-pulse {
+  animation: neonPulse 2s infinite;
+}
+
+/* Make rainbow text more vibrant */
+.rainbow-text {
+  background: linear-gradient(
+    45deg,
+    #63e211,
+    #ff6666,
+    #7fff00,
+    #00ffff,
+    #ff00ff,
+    #63e211
+  );
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: rainbow 2s linear infinite; /* Faster animation */
+}
+
+/* Enhanced glow effects */
+.glow {
+  text-shadow: 0 0 10px #63e211,
+               0 0 20px #63e211,
+               0 0 30px #63e211,
+               0 0 40px #63e211;
+}
+
+.hover-glow:hover {
+  text-shadow: 0 0 10px #63e211,
+               0 0 20px #63e211,
+               0 0 30px #63e211,
+               0 0 40px #63e211;
+  transition: all 0.3s ease;
+}
+
+/* New flashing background */
+.flash-bg {
+  animation: flashBackground 3s infinite;
+}
+
+@keyframes flashBackground {
+  0% { background-color: rgba(99, 226, 17, 0.1); }
+  50% { background-color: rgba(255, 102, 102, 0.1); }
+  100% { background-color: rgba(99, 226, 17, 0.1); }
+}
+
+/* Enhance the gradient animation */
+.animate-gradient {
+  background: linear-gradient(45deg, 
+    #000000, 
+    #0d260d, 
+    #1a4d1a, 
+    #0d260d, 
+    #000000,
+    #1a1a1a,
+    #0d260d
+  );
+  background-size: 400% 400%;
+  animation: gradientBG 10s ease infinite; /* Faster animation */
+}
+
+/* Add a new pulsing shadow effect */
+.pulse-shadow {
+  animation: pulseShadow 2s infinite;
+}
+
+@keyframes pulseShadow {
+  0% { box-shadow: 0 0 10px rgba(99, 226, 17, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(99, 226, 17, 0.8); }
+  100% { box-shadow: 0 0 10px rgba(99, 226, 17, 0.5); }
+}
+
+/* Add these new animations */
+@keyframes moneyFade {
+  0% { opacity: 0; transform: translateY(0); }
+  50% { opacity: 0.1; }
+  100% { opacity: 0; transform: translateY(-100px); }
+}
+
+@keyframes moneyRain {
+  0% { opacity: 0; transform: translateY(-20px); }
+  50% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(100vh) rotate(360deg); }
+}
+
+.money-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.money-emoji {
+  position: absolute;
+  color: #63e211;
+  opacity: 0;
+  font-size: 24px;
+  animation: moneyFade 10s linear infinite;
+  z-index: 0;
+}
+
+.rain-money {
+  position: absolute;
+  color: #63e211;
+  opacity: 0;
+  font-size: 24px;
+  animation: moneyRain 3s linear;
+  z-index: 10;
+} 
