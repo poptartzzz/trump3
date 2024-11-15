@@ -25,16 +25,16 @@ type CoinType = {
 
 export function BalanceDropdown() {
   const [selectedCoin, setSelectedCoin] = React.useState<CoinType>({
-    name: '8BET',
+    name: '888',
     balance: '0.00',
-    icon: '/wagiebetlogocoin1.png',
+    icon: '/8betlogodark.png',
     price: 1.00
   })
 
   const { prices } = usePriceStore()
 
   const coins: CoinType[] = [
-    { name: '8BET', balance: '0.00', icon: '/wagiebetlogocoin1.png', price: prices['8bet'] },
+    { name: '888', balance: '0.00', icon: '/8betlogodark.png', price: prices['888'] },
     { name: 'ETH', balance: '0.00', icon: eth32, price: prices.ethereum },
     { name: 'USDC', balance: '0.00', icon: usdc32, price: 1.00 }
   ]

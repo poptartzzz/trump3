@@ -1,57 +1,67 @@
 import { create } from 'zustand'
 
-interface PriceState {
+type PriceState = {
   prices: {
-    '8bet': number
     ethereum: number
     bitcoin: number
+    '888': number
   }
-  loading: boolean
-  error: string | null
+  previousPrices: {
+    ethereum: number
+    bitcoin: number
+    '888': number
+  }
+  volume24h: number
+  chartData: {
+    ethereum: [number, number][]
+    bitcoin: [number, number][]
+  }
   fetchPrices: () => Promise<void>
 }
 
 export const usePriceStore = create<PriceState>((set) => ({
   prices: {
-    '8bet': 1.00, // Pegged to USDC for now
     ethereum: 0,
-    bitcoin: 0
+    bitcoin: 0,
+    '888': 0
   },
-  loading: false,
-  error: null,
+  previousPrices: {
+    ethereum: 0,
+    bitcoin: 0,
+    '888': 0
+  },
+  volume24h: 0,
+  chartData: {
+    ethereum: [],
+    bitcoin: []
+  },
   fetchPrices: async () => {
     try {
-      set({ loading: true, error: null })
-      
-      // Fetch ETH and BTC prices from CoinGecko
-      const response = await fetch(
-        'https://api.coingecko.com/api/v3/simple/price?ids=ethereum,bitcoin&vs_currencies=usd'
-      )
-      
-      if (!response.ok) throw new Error('Failed to fetch prices')
-      
+      // Fetch ETH and BTC prices from API
+      const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum,bitcoin&vs_currencies=usd')
       const data = await response.json()
-      
-      set({
+
+      set((state) => ({
+        previousPrices: { ...state.prices },
         prices: {
-          '8bet': 1.00, // Keep USDC peg
           ethereum: data.ethereum.usd,
-          bitcoin: data.bitcoin.usd
+          bitcoin: data.bitcoin.usd,
+          '888': 0.00000001
         },
-        loading: false
-      })
-    } catch (err) {
-      set({ 
-        error: err instanceof Error ? err.message : 'Failed to fetch prices',
-        loading: false
-      })
+        volume24h: 3629.10
+      }))
+    } catch (error) {
+      console.error('Error fetching prices:', error)
+      // Set fallback values on error
+      set((state) => ({
+        previousPrices: { ...state.prices },
+        prices: {
+          ethereum: 0,
+          bitcoin: 0,
+          '888': 0
+        },
+        volume24h: 0
+      }))
     }
   }
-}))
-
-// Auto-update prices every minute
-if (typeof window !== 'undefined') {
-  setInterval(() => {
-    usePriceStore.getState().fetchPrices()
-  }, 60000)
-} 
+})) 

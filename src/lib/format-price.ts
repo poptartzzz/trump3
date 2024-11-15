@@ -1,16 +1,14 @@
-export function formatPrice(price: number, options: { 
-  decimals?: number,
-  prefix?: string 
-} = {}) {
-  const { decimals = 2, prefix = '$' } = options
-  
-  return `${prefix}${price.toLocaleString('en-US', {
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals
-  })}`
+export function formatPrice(price: number): string {
+  if (!price) return '$0.00'
+  return price < 0.01 
+    ? `$${price.toFixed(8)}` 
+    : `$${price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 
 export function formatPriceChange(change: number) {
-  const prefix = change >= 0 ? '+' : ''
-  return `${prefix}${change.toFixed(2)}%`
+  if (typeof change !== 'number' || isNaN(change)) {
+    return '+0.00%';
+  }
+  const prefix = change >= 0 ? '+' : '';
+  return `${prefix}${change.toFixed(2)}%`;
 } 

@@ -1,107 +1,70 @@
 'use client'
 
-import Link from 'next/link'
-import { CustomImage } from "@/components/ui/custom-image"
-import { MessageCircle, Twitter, FileText, ShoppingCart, LineChart } from 'lucide-react'
+import Link from "next/link"
+import { MessageCircle, Twitter } from 'lucide-react'
 
 export function Footer() {
   return (
-    <footer className="border-t border-green-900/50 bg-[#0a1f0a] backdrop-blur-sm mt-auto">
-      <div className="container max-w-[1400px] py-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Logo and Description */}
+    <footer className="border-t border-[#63e211]/20 bg-[#0d260d] py-8 mt-16">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Social Links */}
           <div className="space-y-4">
-            <CustomImage
-              src="/8BETbanner.png"
-              alt="8BET Logo"
-              width={200}
-              height={60}
-              className="h-12 w-auto"
-            />
-            <p className="text-xs text-[#63e211]/80 font-press-start-2p">
-              Web3 Skill-Based Wagering Platform
-            </p>
-          </div>
-
-          {/* Quick Links */}
-          <div className="space-y-4">
-            <h3 className="text-sm font-press-start-2p text-[#63e211]">Quick Links</h3>
-            <nav className="flex flex-col space-y-2">
-              <Link href="/staking" className="text-xs text-[#63e211]/80 hover:text-[#63e211] font-press-start-2p">
-                Staking
+            <h3 className="text-sm font-press-start-2p text-[#63e211]">Community</h3>
+            <div className="space-y-2">
+              <Link 
+                href="https://t.me/triple_eight"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-[#63e211]/80 hover:text-[#63e211] text-xs font-press-start-2p"
+              >
+                <MessageCircle className="h-4 w-4" />
+                Telegram
               </Link>
-              <Link href="/account" className="text-xs text-[#63e211]/80 hover:text-[#63e211] font-press-start-2p">
-                Account
+              <Link 
+                href="https://x.com/tripleeighth"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-[#63e211]/80 hover:text-[#63e211] text-xs font-press-start-2p"
+              >
+                <Twitter className="h-4 w-4" />
+                Twitter
               </Link>
-              <Link href="/cashier" className="text-xs text-[#63e211]/80 hover:text-[#63e211] font-press-start-2p">
-                Cashier
-              </Link>
-            </nav>
+            </div>
           </div>
 
           {/* Resources */}
           <div className="space-y-4">
             <h3 className="text-sm font-press-start-2p text-[#63e211]">Resources</h3>
-            <nav className="flex flex-col space-y-2">
+            <div className="space-y-2">
               <Link 
-                href="/litepaper" 
-                className="text-xs text-[#63e211]/80 hover:text-[#63e211] font-press-start-2p flex items-center gap-2"
+                href="/litepaper"
+                className="text-[#63e211]/80 hover:text-[#63e211] text-xs block font-press-start-2p"
               >
-                <FileText className="h-3 w-3" />
                 Litepaper
               </Link>
               <Link 
-                href="https://uniswap.org/" 
+                href="https://app.uniswap.org"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs text-[#63e211]/80 hover:text-[#63e211] font-press-start-2p flex items-center gap-2"
+                className="text-[#63e211]/80 hover:text-[#63e211] text-xs block font-press-start-2p"
               >
-                <ShoppingCart className="h-3 w-3" />
-                Buy 8BET
+                Buy on Uniswap
               </Link>
               <Link 
-                href="https://dexscreener.com/" 
+                href="https://dexscreener.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs text-[#63e211]/80 hover:text-[#63e211] font-press-start-2p flex items-center gap-2"
+                className="text-[#63e211]/80 hover:text-[#63e211] text-xs block font-press-start-2p"
               >
-                <LineChart className="h-3 w-3" />
                 Chart
               </Link>
-            </nav>
-          </div>
-
-          {/* Community */}
-          <div className="space-y-4">
-            <h3 className="text-sm font-press-start-2p text-[#63e211]">Community</h3>
-            <nav className="flex flex-col space-y-2">
-              <Link 
-                href="https://t.me/8beteth" 
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs text-[#63e211]/80 hover:text-[#63e211] font-press-start-2p flex items-center gap-2"
-              >
-                <MessageCircle className="h-3 w-3" />
-                Telegram
-              </Link>
-              <Link 
-                href="https://x.com/8beteth" 
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs text-[#63e211]/80 hover:text-[#63e211] font-press-start-2p flex items-center gap-2"
-              >
-                <Twitter className="h-3 w-3" />
-                Twitter
-              </Link>
-            </nav>
+            </div>
           </div>
         </div>
 
-        {/* Copyright */}
-        <div className="mt-8 pt-8 border-t border-green-900/50 text-center">
-          <p className="text-xs text-[#63e211]/60 font-press-start-2p">
-            © 2024 8BET. All rights reserved.
-          </p>
+        <div className="mt-8 pt-4 border-t border-[#63e211]/20 text-center text-[10px] text-[#63e211]/50 font-press-start-2p">
+          © 2024 888. All rights reserved.
         </div>
       </div>
     </footer>

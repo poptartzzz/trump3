@@ -17,7 +17,7 @@ interface DepositAddressProps {
 
 const walletService = new WalletService()
 
-export function DepositAddress({ tokenName, tokenAddress, network, icon }: DepositAddressProps) {
+export default function DepositAddress({ tokenName, tokenAddress, network, icon }: DepositAddressProps) {
   const [address, setAddress] = useState<string | null>(null)
   const qrRef = useRef<HTMLDivElement>(null)
 
